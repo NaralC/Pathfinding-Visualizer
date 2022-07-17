@@ -1,8 +1,9 @@
 import React from "react";
+import "./Node.css";
 
 type Props = {};
 
-const Node = (props: Props) => {
+const Node: React.FC = (props: Props) => {
   return <div className="node"></div>;
 };
 

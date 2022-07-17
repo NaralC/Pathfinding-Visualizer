@@ -2,8 +2,8 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
+@layer base {
   .node {
-    @apply w-6 h-6 outline-black inline-block;
+    @apply w-6 h-6 inline-block outline-double m-1;
   }
 }

@@ -1,28 +1,27 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Node from "./Components/Node";
 
 type Props = {};
 
-const App = (props: Props) => {
-  const nodeList: number[][] = [];
-
-  // Initiliaze the nodes array with 15 rows and 50 cols
-  useEffect(() => {
-    for (let row = 0; row < 15; row++) {
-      nodeList.push([]);
-      for (let col = 0; col < 50; col++) {
-        nodeList[row][col] = 0;
-      }
-    }
-  }, []);
+const App: React.FC = (props: Props) => {
+  // Initiliaze 15x50 matrix filled with 0s
+  const nodeList: number[][] = Array(15)
+    .fill(0)
+    .map((row) => new Array(50).fill(0));
 
   console.log(nodeList);
   return (
-    <>
-      {nodeList.map((row, col) => (
-        <Node key={`${row}-${col}`} />
-      ))}
-    </>
+    <div>
+      {nodeList.map((row, rowIdx) => {
+        return (
+          <ol>
+            {row.map((col, colIdx) => (
+              <Node></Node>
+            ))}
+          </ol>
+        );
+      })}
+    </div>
   );
 };
 
