@@ -1,15 +1,18 @@
 import { NodeType } from "../App";
 
-export const BFS = (props: {
+type BFSType = {
   matrix: NodeType[][];
   startNode: NodeType;
   endNode: NodeType;
-}): void => {
+};
+
+export const BFS = (props: BFSType): Array<NodeType | undefined> => {
   const appendNeighbors = (node: NodeType | undefined): void => {
     if (!node) return;
 
     // Prevent boundary break or going over the same cell
-    if ( seen.has(node) ||
+    if (
+      node.isVisited ||
       node.row < 0 ||
       node.row >= props.matrix.length ||
       node.col < 0 ||
@@ -20,21 +23,30 @@ export const BFS = (props: {
     q.push(node);
   };
 
-  const q: Array<NodeType | undefined> = [props.startNode];
-  const seen: Set<NodeType | undefined> = new Set<NodeType | undefined>;
+  // TODO: Handle walls
+  // Edge cases
+  if (
+    props.startNode === props.endNode ||
+    !props.matrix ||
+    !props.startNode ||
+    !props.endNode
+  )
+    return [];
 
-  while (q.length > 0) {
+  const q: Array<NodeType | undefined> = [props.startNode];
+  const visitOrder: Array<NodeType | undefined> = []; // Will later be used to display the path
+
+  while (q.length) {
     const node = q.shift();
 
     if (node) {
       if (node === props.endNode) {
-        console.log("Found");
-        return;
+        return visitOrder;
       }
 
       // Mark current node as visited
-      node.isStart = true;
-      seen.add(node);
+      node.isVisited = true;
+      visitOrder.push(node);
 
       appendNeighbors({ ...node, row: node.row - 1 }); // Up
       appendNeighbors({ ...node, row: node.row + 1 }); // Down
@@ -42,6 +54,6 @@ export const BFS = (props: {
       appendNeighbors({ ...node, row: node.col + 1 }); // Right
     }
   }
-
-  return;
+  // TODO: Handle impossible cases
+  return [];
 };
