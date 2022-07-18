@@ -1,10 +1,16 @@
 import React from "react";
 import "./Node.css";
+import { NodeType } from "../App";
 
-type Props = {};
+const Node = (props: NodeType) => {
+  const nodeClassName = (): string => {
+    if (!props.isStart && !props.isFinish) return "node";
 
-const Node: React.FC = (props: Props) => {
-  return <div className="node"></div>;
+    if (props.isStart) return "node-start";
+    else return "node-finish";
+  };
+
+  return <div className={`${nodeClassName()}`}></div>;
 };
 
 export default Node;
