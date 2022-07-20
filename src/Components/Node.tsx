@@ -2,11 +2,17 @@ import React from "react";
 import "./Node.css";
 import { NodeType } from "../App";
 
-const Node = (props: NodeType) => {
+const Node: React.FC<NodeType> = ({
+  row,
+  col,
+  isStart,
+  isFinish,
+  isVisited,
+}) => {
   const nodeClassName = (): string => {
-    if (!props.isStart && !props.isFinish) return "node";
+    if (!isStart && !isFinish) return "node";
 
-    if (props.isStart) return "node-start";
+    if (isStart) return "node-start";
     else return "node-finish";
   };
 

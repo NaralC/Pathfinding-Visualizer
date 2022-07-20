@@ -1,18 +1,18 @@
-import { NodeType } from "../App";
+import { NodeType, Coordinates } from "../App";
 
 type BFSType = {
   matrix: NodeType[][];
-  startNode: NodeType;
-  endNode: NodeType;
+  startPos: Coordinates;
+  endPos: Coordinates;
 };
 
 export const BFS = (props: BFSType): Array<NodeType | undefined> => {
-  const appendNeighbors = (node: NodeType | undefined): void => {
+  const appendNeighbors = (node: Coordinates | undefined): void => {
     if (!node) return;
 
     // Prevent boundary break or going over the same cell
     if (
-      node.isVisited ||
+      props.matrix[node.row][node.col].isVisited ||
       node.row < 0 ||
       node.row >= props.matrix.length ||
       node.col < 0 ||
@@ -26,34 +26,34 @@ export const BFS = (props: BFSType): Array<NodeType | undefined> => {
   // TODO: Handle walls
   // Edge cases
   if (
-    props.startNode === props.endNode ||
+    props.startPos === props.endPos ||
     !props.matrix ||
-    !props.startNode ||
-    !props.endNode
+    !props.startPos ||
+    !props.endPos
   )
     return [];
 
-  const q: Array<NodeType | undefined> = [props.startNode];
+  const q: Array<Coordinates | undefined> = [props.startPos];
   const visitOrder: Array<NodeType | undefined> = []; // Will later be used to display the path
 
   while (q.length) {
     const node = q.shift();
-
     if (node) {
-      if (node === props.endNode) {
+      if (node === props.endPos) {
+        visitOrder.push(props.matrix[node.row][node.col]);
         return visitOrder;
       }
 
       // Mark current node as visited
-      node.isVisited = true;
-      visitOrder.push(node);
+      props.matrix[node.row][node.col].isVisited = true;
+      visitOrder.push(props.matrix[node.row][node.col]);
 
-      appendNeighbors({ ...node, row: node.row - 1 }); // Up
-      appendNeighbors({ ...node, row: node.row + 1 }); // Down
-      appendNeighbors({ ...node, row: node.col - 1 }); // Left
-      appendNeighbors({ ...node, row: node.col + 1 }); // Right
+      appendNeighbors(props.matrix[node.row - 1][node.col]); // Up
+      appendNeighbors(props.matrix[node.row + 1][node.col]); // Down
+      appendNeighbors(props.matrix[node.row][node.col - 1]); // Left
+      appendNeighbors(props.matrix[node.row][node.col + 1]); // Right
     }
   }
   // TODO: Handle impossible cases
-  return [];
+  return visitOrder;
 };
