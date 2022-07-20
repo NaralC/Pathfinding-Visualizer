@@ -21,17 +21,19 @@ const App: React.FC = () => {
 
   // TODO: Return nodes in their visit order
   const startVisualization = (): void => {
-    const visitPath: Array<NodeType | undefined> = BFS({
+    const visitPath: Array<NodeType> = BFS({
       matrix: nodeList,
       startPos: { row: 7, col: 10 },
       endPos: { row: 7, col: 40 },
     });
     console.log(visitPath);
+    console.log(nodeList[6][10]);
+
     // animatePath(visitPath);
   };
 
   // TODO: Animate the visit path
-  const animatePath = (props: Array<NodeType | undefined>): void => {};
+  const animatePath = (props: Array<NodeType>): void => {};
 
   return (
     <>
