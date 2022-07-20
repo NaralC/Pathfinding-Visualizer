@@ -6,7 +6,7 @@ type DFSType = {
   endNode: NodeType;
 };
 
-export const BFS = (props: DFSType): Array<NodeType | undefined> => {
+export const BFS = (props: DFSType): Array<NodeType> => {
   const goToNeighbor = (node: NodeType): void => {
     if (!node) return;
 
@@ -40,7 +40,7 @@ export const BFS = (props: DFSType): Array<NodeType | undefined> => {
   )
     return [];
 
-  const visitOrder: Array<NodeType | undefined> = []; // Will later be used to display the path
+  const visitOrder: Array<NodeType> = []; // Will later be used to display the path
 
   goToNeighbor(props.startNode);
 

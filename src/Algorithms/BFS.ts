@@ -6,8 +6,8 @@ type BFSType = {
   endNode: NodeType;
 };
 
-export const BFS = (props: BFSType): Array<NodeType | undefined> => {
-  const appendNeighbors = (node: NodeType | undefined): void => {
+export const BFS = (props: BFSType): Array<NodeType> => {
+  const appendNeighbors = (node: NodeType): void => {
     if (!node) return;
 
     // Prevent boundary break or going over the same cell
@@ -17,9 +17,13 @@ export const BFS = (props: BFSType): Array<NodeType | undefined> => {
       node.row >= props.matrix.length ||
       node.col < 0 ||
       node.col >= props.matrix[0].length
-    )
+    ) {
       return;
+    }
 
+    // Mark current node as visited
+    node.isVisited = true;
+    visitOrder.push(node); // TODO: These node objects are passed by copies, make the references
     q.push(node);
   };
 
@@ -33,8 +37,8 @@ export const BFS = (props: BFSType): Array<NodeType | undefined> => {
   )
     return [];
 
-  const q: Array<NodeType | undefined> = [props.startNode];
-  const visitOrder: Array<NodeType | undefined> = []; // Will later be used to display the path
+  const q: Array<NodeType> = [props.startNode];
+  const visitOrder: Array<NodeType> = []; // Will later be used to display the path
 
   while (q.length) {
     const node = q.shift();
@@ -44,10 +48,6 @@ export const BFS = (props: BFSType): Array<NodeType | undefined> => {
         return visitOrder;
       }
 
-      // Mark current node as visited
-      node.isVisited = true;
-      visitOrder.push(node);
-
       appendNeighbors({ ...node, row: node.row - 1 }); // Up
       appendNeighbors({ ...node, row: node.row + 1 }); // Down
       appendNeighbors({ ...node, row: node.col - 1 }); // Left
@@ -55,5 +55,5 @@ export const BFS = (props: BFSType): Array<NodeType | undefined> => {
     }
   }
   // TODO: Handle impossible cases
-  return [];
+  return visitOrder;
 };

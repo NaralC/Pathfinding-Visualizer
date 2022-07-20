@@ -16,31 +16,31 @@ const App: React.FC = () => {
 
   // TODO: Return nodes in their visit order
   const startVisualization = () => {
-    const visitPath: Array<NodeType | undefined> = BFS({
+    const visitPath: Array<NodeType> = BFS({
       matrix: nodeList,
       startNode: nodeList[7][10],
       endNode: nodeList[7][40],
     });
 
     console.log(visitPath);
-
+    console.log(nodeList[6][10]);
     // animatePath(visitPath);
   };
 
   // TODO: Animate the visit path
-  const animatePath = (props: Array<NodeType | undefined>) => {};
+  const animatePath = (props: Array<NodeType>) => {};
 
   return (
     <>
       <div className="bg-slate-500 flex items-center justify-center">
-        <button className="bg-slate-400" onClick={() => startVisualization}>
+        <button className="bg-slate-400" onClick={() => startVisualization()}>
           Visualize!
         </button>
       </div>
       <div className="mx-28 my-24">
         {nodeList.map((row, rowIdx) => {
           return (
-            <ol>
+            <ol key={`${row}-${rowIdx}`}>
               {row.map((col, colIdx) => (
                 <Node
                   key={`${rowIdx}-${colIdx}`}
