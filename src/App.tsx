@@ -14,7 +14,7 @@ const App: React.FC = () => {
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
 
   const startVisualization = (): void => {
-    const visitPath: NodeType[] = DFS(
+    const visitPath: NodeType[] = BFS(
       nodeList,
       nodeList[START_ROW][START_COL],
       nodeList[FINISH_ROW][FINISH_COL]
@@ -29,11 +29,20 @@ const App: React.FC = () => {
 
     visitPath.forEach((node, idx) => {
       setTimeout(() => {
-        const newMatrix = emptyNodeList.slice();
+        const newMatrix = [...emptyNodeList];
         newMatrix[node.row][node.col].isVisited = true;
         setNodeList(newMatrix);
       }, 10 * idx);
     });
+  };
+
+  // TODO: Handle wall toggle with mouse events
+  // Walls show up before visualization, but disappears after it starts
+  const toggleWall = (rowIdx: number, colIdx: number) => {
+    const newMatrix = [...nodeList];
+    const node = newMatrix[rowIdx][colIdx];
+    node.isWall = !node.isWall;
+    setNodeList(newMatrix);
   };
 
   return (
@@ -56,6 +65,7 @@ const App: React.FC = () => {
                   isFinish={col.isFinish}
                   isVisited={col.isVisited}
                   isWall={col.isWall}
+                  onMouseDown={() => toggleWall(rowIdx, colIdx)}
                 ></Node>
               ))}
             </ol>
@@ -82,6 +92,7 @@ const initializeMatrix = (): NodeType[][] => {
         isFinish: FINISH_ROW === rowIdx && FINISH_COL === colIdx,
         isVisited: false,
         isWall: false,
+        onMouseDown: () => {},
       };
 
       currentRow.push(currentNode);

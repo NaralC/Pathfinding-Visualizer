@@ -8,34 +8,24 @@ export type NodeType = {
   isFinish: boolean;
   isVisited: boolean;
   isWall: boolean;
+  onMouseDown: () => void;
 };
 
 const Node: React.FC<NodeType> = (props) => {
+  const nodeState = (): string => {
+    if (props.isStart) return "bg-green-400";
+    if (props.isFinish) return "bg-red-400";
+    if (props.isWall) return "bg-black";
+    if (props.isVisited) return "bg-blue-400";
+
+    return "bg-gray-400";
+  };
   return (
     <div
-      className={`node ${
-        props.isStart
-          ? "bg-green-500"
-          : props.isFinish
-          ? "bg-red-500"
-          : props.isVisited
-          ? "bg-blue-500"
-          : props.isWall
-          ? "bg-gray-400"
-          : "bg-gray-400"
-      }`}
+      onMouseDown={() => props.onMouseDown()}
+      className={`node ${nodeState()}`}
     ></div>
   );
-};
-
-// Unused for now, could replace tertiary operator later
-const nodeState = (props: NodeType): string => {
-  if (props.isStart) return "bg-green-400";
-  if (props.isFinish) return "bg-red-400";
-  if (props.isVisited) return "bg-blue-400";
-  if (props.isWall) return "bg-gray-400";
-
-  return "bg-gray-400";
 };
 
 export default Node;
