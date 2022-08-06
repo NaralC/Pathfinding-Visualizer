@@ -2,16 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer base {
-  .node {
-    @apply w-6 h-6 inline-block outline-double m-1 bg-gray-400;
-  }
-
-  .node-start {
-    @apply w-6 h-6 inline-block outline-double m-1 bg-green-400;
-  }
-
-  .node-finish {
-    @apply w-6 h-6 inline-block outline-double m-1 bg-red-400;
-  }
+.node {
+  @apply w-6 h-6 inline-block outline-double m-1;
 }

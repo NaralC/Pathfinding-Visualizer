@@ -1,16 +1,26 @@
 import React from "react";
 import "./Node.css";
-import { NodeType } from "../App";
 
-const Node = (props: NodeType) => {
-  const nodeClassName = (): string => {
-    if (!props.isStart && !props.isFinish) return "node";
+export type NodeType = {
+  row: number;
+  col: number;
+  isStart: boolean;
+  isFinish: boolean;
+  isVisited: boolean;
+  isWall: boolean;
+};
 
-    if (props.isStart) return "node-start";
-    else return "node-finish";
+const Node: React.FC<NodeType> = (props) => {
+  const nodeState = (): string => {
+    if (props.isStart) return "bg-green-400";
+    if (props.isFinish) return "bg-red-400";
+    if (props.isVisited) return "bg-blue-400";
+    if (props.isWall) return "bg-gray-400";
+
+    return "bg-gray-400";
   };
 
-  return <div className={`${nodeClassName()}`}></div>;
+  return <div className={`node ${nodeState()}`}></div>;
 };
 
 export default Node;

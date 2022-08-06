@@ -1,34 +1,41 @@
 import React, { useEffect, useState } from "react";
-import Node from "./Components/Node";
+import Node, { NodeType } from "./Components/Node";
 import { BFS } from "./Algorithms/BFS";
 
-export type NodeType = {
-  row: number;
-  col: number;
-  isStart: boolean;
-  isFinish: boolean;
-  isVisited: boolean;
-};
+// Hardcoded start and finish nodes
+const START_ROW: number = 7;
+const START_COL: number = 10;
+const FINISH_ROW: number = 7;
+const FINISH_COL: number = 40;
 
 const App: React.FC = () => {
   // Initiliaze a 15 row by 50 col matrix
-  const nodeList: NodeType[][] = initializeMatrix();
+  const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
 
   // TODO: Return nodes in their visit order
-  const startVisualization = () => {
-    const visitPath: Array<NodeType> = BFS({
-      matrix: nodeList,
-      startNode: nodeList[7][10],
-      endNode: nodeList[7][40],
-    });
+  const startVisualization = (): void => {
+    const visitPath: NodeType[] = BFS(
+      nodeList,
+      nodeList[START_ROW][START_COL],
+      nodeList[FINISH_ROW][FINISH_COL]
+    );
 
     console.log(visitPath);
-    console.log(nodeList[6][10]);
-    // animatePath(visitPath);
+    animatePath(visitPath);
   };
 
   // TODO: Animate the visit path
-  const animatePath = (props: Array<NodeType>) => {};
+  const animatePath = (visitPath: NodeType[]) => {
+    for (let idx = 0; idx < visitPath.length; idx++) {
+      setTimeout(() => {
+        const node = visitPath[idx];
+        const newMatrix = nodeList.slice();
+        const newNode = { ...node, isVisited: true };
+        newMatrix[node.row][node.col] = newNode;
+        setNodeList(newMatrix);
+      }, 250 * idx);
+    }
+  };
 
   return (
     <>
@@ -49,6 +56,7 @@ const App: React.FC = () => {
                   isStart={col.isStart}
                   isFinish={col.isFinish}
                   isVisited={col.isVisited}
+                  isWall={col.isWall}
                 ></Node>
               ))}
             </ol>
@@ -71,9 +79,10 @@ const initializeMatrix = (): NodeType[][] => {
       const currentNode: NodeType = {
         row: rowIdx,
         col: colIdx,
-        isStart: rowIdx === 7 && colIdx === 10,
-        isFinish: rowIdx === 7 && colIdx === 40,
+        isStart: START_ROW === rowIdx && START_COL === colIdx,
+        isFinish: FINISH_ROW === rowIdx && FINISH_COL === colIdx,
         isVisited: false,
+        isWall: false,
       };
 
       currentRow.push(currentNode);
