@@ -11,22 +11,22 @@ export const BFS = (
 
     if (row > 0) {
       if (!matrix[row - 1][col].isVisited) {
-        queue.push(matrix[row - 1][col]);
+        stack.push(matrix[row - 1][col]);
       }
     }
     if (row < matrix.length - 1) {
       if (!matrix[row + 1][col].isVisited) {
-        queue.push(matrix[row + 1][col]);
+        stack.push(matrix[row + 1][col]);
       }
     }
     if (col > 0) {
       if (!matrix[row][col - 1].isVisited) {
-        queue.push(matrix[row][col - 1]);
+        stack.push(matrix[row][col - 1]);
       }
     }
     if (col < matrix[0].length - 1) {
       if (!matrix[row][col + 1].isVisited) {
-        queue.push(matrix[row][col + 1]);
+        stack.push(matrix[row][col + 1]);
       }
     }
 
@@ -37,11 +37,11 @@ export const BFS = (
   // Edge cases
   if (startNode === endNode || !matrix || !startNode || !endNode) return [];
 
-  const queue: NodeType[] = [startNode];
+  const stack: NodeType[] = [startNode];
   const visitOrder: NodeType[] = [];
 
-  while (queue.length) {
-    const node = queue.shift();
+  while (stack.length) {
+    const node = stack.pop(); // The only difference between BFS and DFS
 
     if (!node || node.isWall || node.isVisited) continue;
     if (node === endNode) return visitOrder;

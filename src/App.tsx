@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Node, { NodeType } from "./Components/Node";
 import { BFS } from "./Algorithms/BFS";
+import { DFS } from "./Algorithms/DFS";
 
 // Hardcoded start and finish nodes
 const START_ROW: number = 7;
@@ -12,29 +13,27 @@ const App: React.FC = () => {
   // Initiliaze a 15 row by 50 col matrix
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
 
-  // TODO: Return nodes in their visit order
   const startVisualization = (): void => {
-    const visitPath: NodeType[] = BFS(
+    const visitPath: NodeType[] = DFS(
       nodeList,
       nodeList[START_ROW][START_COL],
       nodeList[FINISH_ROW][FINISH_COL]
     );
-
-    console.log(visitPath);
     animatePath(visitPath);
   };
 
-  // TODO: Animate the visit path
-  const animatePath = (visitPath: NodeType[]) => {
-    for (let idx = 0; idx < visitPath.length; idx++) {
+  // Reset all visited nodes -> Animate the visited path
+  const animatePath = (visitPath: NodeType[]): void => {
+    const emptyNodeList: NodeType[][] = initializeMatrix();
+    setNodeList(emptyNodeList);
+
+    visitPath.forEach((node, idx) => {
       setTimeout(() => {
-        const node = visitPath[idx];
-        const newMatrix = nodeList.slice();
-        const newNode = { ...node, isVisited: true };
-        newMatrix[node.row][node.col] = newNode;
+        const newMatrix = emptyNodeList.slice();
+        newMatrix[node.row][node.col].isVisited = true;
         setNodeList(newMatrix);
-      }, 250 * idx);
-    }
+      }, 10 * idx);
+    });
   };
 
   return (
