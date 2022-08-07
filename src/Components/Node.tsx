@@ -10,7 +10,7 @@ export type NodeType = {
   isWall: boolean;
   onMouseDown: () => void;
   onMouseUp: () => void;
-  onMouseEnter: () => void; // Handle mouse hovering over a node
+  onMouseEnter: () => void; // Dragging mouse over a node
 };
 
 const Node: React.FC<NodeType> = (props) => {
@@ -27,7 +27,7 @@ const Node: React.FC<NodeType> = (props) => {
       onMouseDown={() => props.onMouseDown()}
       onMouseUp={() => props.onMouseUp()}
       onMouseEnter={() => props.onMouseEnter()}
-      className={`node ${nodeState()}`}
+      className={`node ${nodeState()} duration-500 ease-in-out delay-25`}
     ></div>
   );
 };

@@ -15,18 +15,18 @@ const App: React.FC = () => {
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
 
   const startVisualization = (): void => {
-    console.log(nodeList);
     const visitPath: NodeType[] = BFS(
       nodeList,
       nodeList[START_ROW][START_COL],
       nodeList[FINISH_ROW][FINISH_COL]
     );
+
     animatePath(visitPath);
   };
 
   // Reset the entire matrix clean -> Animate the visited path
   const animatePath = (visitPath: NodeType[]): void => {
-    const emptyNodeList: NodeType[][] = initializeMatrix();
+    const emptyNodeList = initializeMatrix();
     setNodeList(emptyNodeList);
 
     visitPath.forEach((node, idx) => {
@@ -53,11 +53,11 @@ const App: React.FC = () => {
     toggleWall(rowIdx, colIdx);
   };
 
-  const handleMouseUp = (rowIdx: number, colIdx: number) => {
+  const handleMouseUp = () => {
     toggleMouseIsDown(false);
   };
 
-  // Only works if mouse is down and being dragged
+  // Only works if mouse is held down and being dragged
   const handleMouseEnter = (rowIdx: number, colIdx: number) => {
     if (mouseIsDown) {
       toggleWall(rowIdx, colIdx);
@@ -65,7 +65,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <>
+    <div>
       <div className="bg-slate-500 flex items-center justify-center">
         <button className="bg-slate-400" onClick={() => startVisualization()}>
           Visualize!
@@ -85,7 +85,7 @@ const App: React.FC = () => {
                   isVisited={col.isVisited}
                   isWall={col.isWall}
                   onMouseDown={() => handleMouseDown(rowIdx, colIdx)}
-                  onMouseUp={() => handleMouseUp(rowIdx, colIdx)}
+                  onMouseUp={() => handleMouseUp()}
                   onMouseEnter={() => handleMouseEnter(rowIdx, colIdx)}
                 ></Node>
               ))}
@@ -93,7 +93,7 @@ const App: React.FC = () => {
           );
         })}
       </div>
-    </>
+    </div>
   );
 };
 

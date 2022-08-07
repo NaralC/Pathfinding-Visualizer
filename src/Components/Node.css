@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .node {
-  @apply w-6 h-6 inline-block outline-double m-1;
+  @apply w-6 h-6 inline-block mx-1 my-0.5 border-solid border-2 border-gray-500;
 }
