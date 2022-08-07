@@ -12,8 +12,10 @@ const FINISH_COL: number = 40;
 const App: React.FC = () => {
   // Initiliaze a 15 row by 50 col matrix
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
+  const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
 
   const startVisualization = (): void => {
+    console.log(nodeList);
     const visitPath: NodeType[] = BFS(
       nodeList,
       nodeList[START_ROW][START_COL],
@@ -22,7 +24,7 @@ const App: React.FC = () => {
     animatePath(visitPath);
   };
 
-  // Reset all visited nodes -> Animate the visited path
+  // Reset the entire matrix clean -> Animate the visited path
   const animatePath = (visitPath: NodeType[]): void => {
     const emptyNodeList: NodeType[][] = initializeMatrix();
     setNodeList(emptyNodeList);
@@ -32,7 +34,7 @@ const App: React.FC = () => {
         const newMatrix = [...emptyNodeList];
         newMatrix[node.row][node.col].isVisited = true;
         setNodeList(newMatrix);
-      }, 10 * idx);
+      }, 5 * idx);
     });
   };
 
@@ -41,8 +43,25 @@ const App: React.FC = () => {
   const toggleWall = (rowIdx: number, colIdx: number) => {
     const newMatrix = [...nodeList];
     const node = newMatrix[rowIdx][colIdx];
-    node.isWall = !node.isWall;
+    const newNode = { ...node, isWall: !node.isWall };
+    newMatrix[rowIdx][colIdx] = newNode;
     setNodeList(newMatrix);
+  };
+
+  const handleMouseDown = (rowIdx: number, colIdx: number) => {
+    toggleMouseIsDown(true);
+    toggleWall(rowIdx, colIdx);
+  };
+
+  const handleMouseUp = (rowIdx: number, colIdx: number) => {
+    toggleMouseIsDown(false);
+  };
+
+  // Only works if mouse is down and being dragged
+  const handleMouseEnter = (rowIdx: number, colIdx: number) => {
+    if (mouseIsDown) {
+      toggleWall(rowIdx, colIdx);
+    }
   };
 
   return (
@@ -65,7 +84,9 @@ const App: React.FC = () => {
                   isFinish={col.isFinish}
                   isVisited={col.isVisited}
                   isWall={col.isWall}
-                  onMouseDown={() => toggleWall(rowIdx, colIdx)}
+                  onMouseDown={() => handleMouseDown(rowIdx, colIdx)}
+                  onMouseUp={() => handleMouseUp(rowIdx, colIdx)}
+                  onMouseEnter={() => handleMouseEnter(rowIdx, colIdx)}
                 ></Node>
               ))}
             </ol>
@@ -93,6 +114,8 @@ const initializeMatrix = (): NodeType[][] => {
         isVisited: false,
         isWall: false,
         onMouseDown: () => {},
+        onMouseUp: () => {},
+        onMouseEnter: () => {},
       };
 
       currentRow.push(currentNode);

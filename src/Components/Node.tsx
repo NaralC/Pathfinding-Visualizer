@@ -9,6 +9,8 @@ export type NodeType = {
   isVisited: boolean;
   isWall: boolean;
   onMouseDown: () => void;
+  onMouseUp: () => void;
+  onMouseEnter: () => void; // Handle mouse hovering over a node
 };
 
 const Node: React.FC<NodeType> = (props) => {
@@ -23,6 +25,8 @@ const Node: React.FC<NodeType> = (props) => {
   return (
     <div
       onMouseDown={() => props.onMouseDown()}
+      onMouseUp={() => props.onMouseUp()}
+      onMouseEnter={() => props.onMouseEnter()}
       className={`node ${nodeState()}`}
     ></div>
   );
