@@ -8,6 +8,7 @@ export type NodeType = {
   isFinish: boolean;
   isVisited: boolean;
   isWall: boolean;
+  previousNode: NodeType | null;
   onMouseDown: () => void;
   onMouseUp: () => void;
   onMouseEnter: () => void; // Dragging mouse over a node

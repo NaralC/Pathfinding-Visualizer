@@ -1,5 +1,9 @@
 import { NodeType } from "../Components/Node";
 
+// TODO: Implement shortest path by backtracking
+// Make nodes point back to their previous one, allowing us to compute the shortest path
+// by backtracking from the finish node.
+
 export const BFS = (
   matrix: NodeType[][],
   startNode: NodeType,
@@ -12,21 +16,25 @@ export const BFS = (
     if (row > 0) {
       if (!matrix[row - 1][col].isVisited) {
         queue.push(matrix[row - 1][col]);
+        matrix[row - 1][col].previousNode = node;
       }
     }
     if (row < matrix.length - 1) {
       if (!matrix[row + 1][col].isVisited) {
         queue.push(matrix[row + 1][col]);
+        matrix[row + 1][col].previousNode = node;
       }
     }
     if (col > 0) {
       if (!matrix[row][col - 1].isVisited) {
         queue.push(matrix[row][col - 1]);
+        matrix[row][col - 1].previousNode = node;
       }
     }
     if (col < matrix[0].length - 1) {
       if (!matrix[row][col + 1].isVisited) {
         queue.push(matrix[row][col + 1]);
+        matrix[row][col + 1].previousNode = node;
       }
     }
 

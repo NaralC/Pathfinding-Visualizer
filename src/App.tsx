@@ -10,7 +10,6 @@ const FINISH_ROW: number = 7;
 const FINISH_COL: number = 40;
 
 const App: React.FC = () => {
-  // Initiliaze a 15 row by 50 col matrix
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
 
@@ -24,22 +23,32 @@ const App: React.FC = () => {
     animatePath(visitPath);
   };
 
-  // Reset the entire matrix clean -> Animate the visited path
   const animatePath = (visitPath: NodeType[]): void => {
-    const emptyNodeList = initializeMatrix();
-    setNodeList(emptyNodeList);
+    // Create a copy of nodeList that only keeps walls
+    const nodeListWithWalls = [...nodeList];
+
+    for (let row = 0; row < nodeListWithWalls.length; row++) {
+      for (let col = 0; col < nodeListWithWalls[row].length; col++) {
+        if (!nodeListWithWalls[row][col].isWall) {
+          nodeListWithWalls[row][col].isVisited = false;
+          continue;
+        }
+      }
+    }
+
+    // Reset nodeList to all default nodes
+    setNodeList(initializeMatrix());
 
     visitPath.forEach((node, idx) => {
       setTimeout(() => {
-        const newMatrix = [...emptyNodeList];
+        const newMatrix = [...nodeListWithWalls];
         newMatrix[node.row][node.col].isVisited = true;
         setNodeList(newMatrix);
       }, 5 * idx);
     });
   };
 
-  // TODO: Handle wall toggle with mouse events
-  // Walls show up before visualization, but disappears after it starts
+  // Handle wall toggle with mouse events
   const toggleWall = (rowIdx: number, colIdx: number) => {
     const newMatrix = [...nodeList];
     const node = newMatrix[rowIdx][colIdx];
@@ -66,8 +75,11 @@ const App: React.FC = () => {
 
   return (
     <div>
-      <div className="bg-slate-500 flex items-center justify-center">
-        <button className="bg-slate-400" onClick={() => startVisualization()}>
+      <div className="flex flex-col items-center justify-center">
+        <button
+          className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded m-4"
+          onClick={() => startVisualization()}
+        >
           Visualize!
         </button>
       </div>
@@ -84,6 +96,7 @@ const App: React.FC = () => {
                   isFinish={col.isFinish}
                   isVisited={col.isVisited}
                   isWall={col.isWall}
+                  previousNode={null}
                   onMouseDown={() => handleMouseDown(rowIdx, colIdx)}
                   onMouseUp={() => handleMouseUp()}
                   onMouseEnter={() => handleMouseEnter(rowIdx, colIdx)}
@@ -99,6 +112,8 @@ const App: React.FC = () => {
 
 export default App;
 
+// Initiliaze a 15 row by 50 col matrix
+// Matrix size is hard coded here
 const initializeMatrix = (): NodeType[][] => {
   const nodeList: NodeType[][] = [];
 
@@ -113,6 +128,7 @@ const initializeMatrix = (): NodeType[][] => {
         isFinish: FINISH_ROW === rowIdx && FINISH_COL === colIdx,
         isVisited: false,
         isWall: false,
+        previousNode: null,
         onMouseDown: () => {},
         onMouseUp: () => {},
         onMouseEnter: () => {},
@@ -125,3 +141,7 @@ const initializeMatrix = (): NodeType[][] => {
 
   return nodeList;
 };
+
+// TODO: Navbar/Sidebar for picking algorithms and navigation
+// TODO: Maze Generation (Binary Tree, Kruskal's, Prim's)
+// TODO: More Pathfinding Algorithms (A*, Djikstra)
