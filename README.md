@@ -8,7 +8,7 @@
 #### With the introduction of countless frontend concepts during my first internship, I aim to practice and broaden my understanding on them. Such concepts and technologies include, but are not limited to:
 - ReactJS (Functional Components & Basic Hooks)
 - TypeScript in General
-- Tailwind CSS (for animations)
+- Tailwind CSS & daisyUI (Animations & Responsiveness)
 - Data Structures & Pathfinding Algorithms (Breadth-first Search, Depth-first Search, etc.)
 
 ### Demo of the web app
