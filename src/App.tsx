@@ -14,16 +14,19 @@ const App: React.FC = () => {
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
 
   const startVisualization = (): void => {
-    const visitPath: NodeType[] = BFS(
+    const { visitPath, shortestPath } = BFS(
       nodeList,
       nodeList[START_ROW][START_COL],
       nodeList[FINISH_ROW][FINISH_COL]
     );
 
-    animatePath(visitPath);
+    animatePath(visitPath, shortestPath);
   };
 
-  const animatePath = (visitPath: NodeType[]): void => {
+  const animatePath = (
+    visitPath: NodeType[],
+    shortestPath: NodeType[]
+  ): void => {
     // Create a copy of nodeList that only keeps walls
     const nodeListWithWalls = [...nodeList];
 
@@ -39,12 +42,22 @@ const App: React.FC = () => {
     // Reset nodeList to all default nodes
     setNodeList(initializeMatrix());
 
+    // Animate the algorithm
     visitPath.forEach((node, idx) => {
       setTimeout(() => {
         const newMatrix = [...nodeListWithWalls];
         newMatrix[node.row][node.col].isVisited = true;
         setNodeList(newMatrix);
       }, 5 * idx);
+    });
+
+    // Animate the shortest path
+    shortestPath.forEach((node, idx) => {
+      setTimeout(() => {
+        const newMatrix = [...nodeListWithWalls];
+        newMatrix[node.row][node.col].isShortestPath = true;
+        setNodeList(newMatrix);
+      }, 20 * idx);
     });
   };
 
@@ -96,7 +109,8 @@ const App: React.FC = () => {
                   isFinish={col.isFinish}
                   isVisited={col.isVisited}
                   isWall={col.isWall}
-                  previousNode={null}
+                  isShortestPath={col.isShortestPath}
+                  previousNode={col.previousNode}
                   onMouseDown={() => handleMouseDown(rowIdx, colIdx)}
                   onMouseUp={() => handleMouseUp()}
                   onMouseEnter={() => handleMouseEnter(rowIdx, colIdx)}
@@ -128,6 +142,7 @@ const initializeMatrix = (): NodeType[][] => {
         isFinish: FINISH_ROW === rowIdx && FINISH_COL === colIdx,
         isVisited: false,
         isWall: false,
+        isShortestPath: false,
         previousNode: null,
         onMouseDown: () => {},
         onMouseUp: () => {},
