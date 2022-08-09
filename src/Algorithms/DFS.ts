@@ -11,21 +11,25 @@ export const DFS = (
 
     if (row > 0) {
       if (!matrix[row - 1][col].isVisited) {
+        matrix[row - 1][col].previousNode = node;
         stack.push(matrix[row - 1][col]);
       }
     }
     if (row < matrix.length - 1) {
       if (!matrix[row + 1][col].isVisited) {
+        matrix[row + 1][col] = node;
         stack.push(matrix[row + 1][col]);
       }
     }
     if (col > 0) {
       if (!matrix[row][col - 1].isVisited) {
+        matrix[row][col - 1] = node;
         stack.push(matrix[row][col - 1]);
       }
     }
     if (col < matrix[0].length - 1) {
       if (!matrix[row][col + 1].isVisited) {
+        matrix[row][col + 1] = node;
         stack.push(matrix[row][col + 1]);
       }
     }

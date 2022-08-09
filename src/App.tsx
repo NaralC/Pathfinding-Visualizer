@@ -14,16 +14,19 @@ const App: React.FC = () => {
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
 
   const startVisualization = (): void => {
-    const visitPath: NodeType[] = BFS(
+    const { visitPath, shortestPath } = BFS(
       nodeList,
       nodeList[START_ROW][START_COL],
       nodeList[FINISH_ROW][FINISH_COL]
     );
 
-    animatePath(visitPath);
+    animatePath(visitPath, shortestPath);
   };
 
-  const animatePath = (visitPath: NodeType[]): void => {
+  const animatePath = (
+    visitPath: NodeType[],
+    shortestPath: NodeType[]
+  ): void => {
     // Create a copy of nodeList that only keeps walls
     const nodeListWithWalls = [...nodeList];
 
@@ -39,6 +42,7 @@ const App: React.FC = () => {
     // Reset nodeList to all default nodes
     setNodeList(initializeMatrix());
 
+    // Animate the algorithm
     visitPath.forEach((node, idx) => {
       setTimeout(() => {
         const newMatrix = [...nodeListWithWalls];
@@ -46,6 +50,10 @@ const App: React.FC = () => {
         setNodeList(newMatrix);
       }, 5 * idx);
     });
+
+    // Animate the shortest path
+    console.log(shortestPath);
+    console.log(visitPath);
   };
 
   // Handle wall toggle with mouse events
