@@ -8,6 +8,7 @@ export type NodeType = {
   isFinish: boolean;
   isVisited: boolean;
   isWall: boolean;
+  isShortestPath: boolean;
   previousNode: NodeType | null;
   onMouseDown: () => void;
   onMouseUp: () => void;
@@ -19,6 +20,7 @@ const Node: React.FC<NodeType> = (props) => {
     if (props.isStart) return "bg-green-400";
     if (props.isFinish) return "bg-red-400";
     if (props.isWall) return "bg-black";
+    if (props.isShortestPath) return "bg-yellow-400";
     if (props.isVisited) return "bg-blue-400";
 
     return "bg-gray-400";

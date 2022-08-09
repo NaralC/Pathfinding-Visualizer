@@ -69,7 +69,8 @@ export const BFS = (
     const node = queue.shift(); // The only difference between BFS and DFS
 
     if (!node || node.isWall || node.isVisited) continue;
-    if (node === endNode) [visitOrder, getShortestPath()];
+    if (node === endNode)
+      return { visitPath: visitOrder, shortestPath: getShortestPath() };
 
     visitOrder.push(node);
     getUnvisitedNeighbors(node);

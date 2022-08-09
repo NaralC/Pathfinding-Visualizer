@@ -52,8 +52,13 @@ const App: React.FC = () => {
     });
 
     // Animate the shortest path
-    console.log(shortestPath);
-    console.log(visitPath);
+    shortestPath.forEach((node, idx) => {
+      setTimeout(() => {
+        const newMatrix = [...nodeListWithWalls];
+        newMatrix[node.row][node.col].isShortestPath = true;
+        setNodeList(newMatrix);
+      }, 20 * idx);
+    });
   };
 
   // Handle wall toggle with mouse events
@@ -104,7 +109,8 @@ const App: React.FC = () => {
                   isFinish={col.isFinish}
                   isVisited={col.isVisited}
                   isWall={col.isWall}
-                  previousNode={null}
+                  isShortestPath={col.isShortestPath}
+                  previousNode={col.previousNode}
                   onMouseDown={() => handleMouseDown(rowIdx, colIdx)}
                   onMouseUp={() => handleMouseUp()}
                   onMouseEnter={() => handleMouseEnter(rowIdx, colIdx)}
@@ -136,6 +142,7 @@ const initializeMatrix = (): NodeType[][] => {
         isFinish: FINISH_ROW === rowIdx && FINISH_COL === colIdx,
         isVisited: false,
         isWall: false,
+        isShortestPath: false,
         previousNode: null,
         onMouseDown: () => {},
         onMouseUp: () => {},
