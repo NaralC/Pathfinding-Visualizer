@@ -62,8 +62,10 @@ export const DFS = (
     const node = stack.pop(); // The only difference between BFS and DFS
 
     if (!node || node.isWall || node.isVisited) continue;
-    if (node === endNode)
+    if (node === endNode) {
+      endNode.isVisited = true;
       return { visitPath: visitOrder, shortestPath: getShortestPath() };
+    }
 
     visitOrder.push(node);
     getUnvisitedNeighbors(node);
