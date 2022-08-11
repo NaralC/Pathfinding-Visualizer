@@ -1,17 +1,10 @@
 import { NodeType } from "../Components/Node";
 
-// TODO: Implement shortest path by backtracking
-// Make nodes point back to their previous one, allowing us to compute the shortest path
-// by backtracking from the finish node.
-
 export const BFS = (
   matrix: NodeType[][],
   startNode: NodeType,
   endNode: NodeType
-): {
-  visitPath: NodeType[];
-  shortestPath: NodeType[];
-} => {
+): { visitPath: NodeType[]; shortestPath: NodeType[] } => {
   const getUnvisitedNeighbors = (node: NodeType): void => {
     if (node.isVisited) return;
     const { row, col } = node;
@@ -69,8 +62,10 @@ export const BFS = (
     const node = queue.shift(); // The only difference between BFS and DFS
 
     if (!node || node.isWall || node.isVisited) continue;
-    if (node === endNode)
+    if (node === endNode) {
+      endNode.isVisited = true;
       return { visitPath: visitOrder, shortestPath: getShortestPath() };
+    }
 
     visitOrder.push(node);
     getUnvisitedNeighbors(node);

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Node, { NodeType } from "./Components/Node";
 import { BFS } from "./Algorithms/BFS";
 import { DFS } from "./Algorithms/DFS";
+import Modal from "./Components/Modal";
 
 // Hardcoded start and finish nodes
 const START_ROW: number = 7;
@@ -12,6 +13,7 @@ const FINISH_COL: number = 40;
 const App: React.FC = () => {
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
+  const [showModal, setshowModal] = useState<boolean>(false);
 
   const startVisualization = (): void => {
     const { visitPath, shortestPath } = BFS(
@@ -32,7 +34,10 @@ const App: React.FC = () => {
 
     for (let row = 0; row < nodeListWithWalls.length; row++) {
       for (let col = 0; col < nodeListWithWalls[row].length; col++) {
-        if (!nodeListWithWalls[row][col].isWall) {
+        if (
+          !nodeListWithWalls[row][col].isWall &&
+          !nodeListWithWalls[row][col].isFinish
+        ) {
           nodeListWithWalls[row][col].isVisited = false;
           continue;
         }
@@ -59,6 +64,15 @@ const App: React.FC = () => {
         setNodeList(newMatrix);
       }, 20 * idx);
     });
+
+    // TODO: Handle impossible cases
+    if (!nodeList[FINISH_ROW][FINISH_COL].isVisited) {
+      setshowModal(true);
+
+      setTimeout(() => {
+        setshowModal(false);
+      }, 2000);
+    }
   };
 
   // Handle wall toggle with mouse events
@@ -97,6 +111,12 @@ const App: React.FC = () => {
         </button>
       </div>
       <div className="mx-28 my-24">
+        {showModal && (
+          <Modal
+            header="Couldn't find the most optimal path"
+            body="All paths leading to the finish are blocked!"
+          />
+        )}
         {nodeList.map((row, rowIdx) => {
           return (
             <ol key={`${row}-${rowIdx}`}>
