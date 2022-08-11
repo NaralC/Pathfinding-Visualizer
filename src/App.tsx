@@ -3,6 +3,7 @@ import Node, { NodeType } from "./Components/Node";
 import { BFS } from "./Algorithms/BFS";
 import { DFS } from "./Algorithms/DFS";
 import Modal from "./Components/Modal";
+import Dropdown from "./Components/Dropdown";
 
 // Hardcoded start and finish nodes
 const START_ROW: number = 7;
@@ -14,6 +15,9 @@ const App: React.FC = () => {
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
   const [showModal, setshowModal] = useState<boolean>(false);
+  const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
+
+  const listOfAlgos = ["BFS", "DFS"];
 
   const startVisualization = (): void => {
     const { visitPath, shortestPath } = BFS(
@@ -65,7 +69,6 @@ const App: React.FC = () => {
       }, 20 * idx);
     });
 
-    // TODO: Handle impossible cases
     if (!nodeList[FINISH_ROW][FINISH_COL].isVisited) {
       setshowModal(true);
 
@@ -109,6 +112,11 @@ const App: React.FC = () => {
         >
           Visualize!
         </button>
+        <Dropdown
+          changeAlgo={setPathfindingAlgo}
+          currentAlgo={pathfindingAlgo}
+          listOfAlgos={listOfAlgos}
+        />
       </div>
       <div className="mx-28 my-24">
         {showModal && (
