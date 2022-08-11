@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 .node {
-  @apply w-6 h-6 inline-block mx-1 my-0.5 border-solid border-2 border-gray-500;
+  /* @apply w-6 h-6 mx-1 my-0.5 inline-block  border-solid border-2 border-gray-500; */
+  @apply 2xl:w-5 2xl:h-5 2xl:mx-1 2xl:my-0.5 xl:w-3.5 xl:h-3.5 inline-block border-solid border-2 border-gray-500;
 }

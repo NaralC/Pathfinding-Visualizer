@@ -34,7 +34,10 @@ const App: React.FC = () => {
 
     for (let row = 0; row < nodeListWithWalls.length; row++) {
       for (let col = 0; col < nodeListWithWalls[row].length; col++) {
-        if (!nodeListWithWalls[row][col].isWall) {
+        if (
+          !nodeListWithWalls[row][col].isWall &&
+          !nodeListWithWalls[row][col].isFinish
+        ) {
           nodeListWithWalls[row][col].isVisited = false;
           continue;
         }
@@ -64,7 +67,11 @@ const App: React.FC = () => {
 
     // TODO: Handle impossible cases
     if (!nodeList[FINISH_ROW][FINISH_COL].isVisited) {
-      console.log("impossible");
+      setshowModal(true);
+
+      setTimeout(() => {
+        setshowModal(false);
+      }, 2000);
     }
   };
 
@@ -104,10 +111,12 @@ const App: React.FC = () => {
         </button>
       </div>
       <div className="mx-28 my-24">
-        <Modal
-          header="Couldn't find the most optimal path"
-          body="All paths leading to the finish are blocked!"
-        />
+        {showModal && (
+          <Modal
+            header="Couldn't find the most optimal path"
+            body="All paths leading to the finish are blocked!"
+          />
+        )}
         {nodeList.map((row, rowIdx) => {
           return (
             <ol key={`${row}-${rowIdx}`}>
