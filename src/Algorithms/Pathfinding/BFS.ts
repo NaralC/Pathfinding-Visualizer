@@ -1,4 +1,4 @@
-import { NodeType } from "../Components/Node";
+import { NodeType } from "../../Components/Node";
 
 export const BFS = (
   matrix: NodeType[][],

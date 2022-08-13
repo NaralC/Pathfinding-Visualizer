@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import Node, { NodeType } from "./Components/Node";
-import { BFS } from "./Algorithms/BFS";
-import { DFS } from "./Algorithms/DFS";
+import { BFS } from "./Algorithms/Pathfinding/BFS";
+import { DFS } from "./Algorithms/Pathfinding/DFS";
+import { randomMaze } from "./Algorithms/MazeGeneration/randomMaze";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
+import Button from "./Components/Button";
 
 // Hardcoded start and finish nodes
 const START_ROW: number = 7;
 const START_COL: number = 10;
 const FINISH_ROW: number = 7;
 const FINISH_COL: number = 40;
+const MATRIX_ROWS: number = 15;
+const MATRIX_COLS: number = 50;
 
 const App: React.FC = () => {
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
@@ -120,7 +124,6 @@ const App: React.FC = () => {
     });
   };
 
-  // Handle wall toggle with mouse events
   const toggleWall = (rowIdx: number, colIdx: number) => {
     if (isAnimating) return;
 
@@ -153,25 +156,41 @@ const App: React.FC = () => {
     }
   };
 
+  const handleMazeGeneration = () => {
+    setNodeList(randomMaze(nodeList));
+  };
+
   return (
     <div className="flex flex-col">
-      <div className="flex flex-row justify-center align-middle m-5 bg-slate-400">
-        <Dropdown
-          changeAlgo={setPathfindingAlgo}
-          currentAlgo={pathfindingAlgo}
-          listOfAlgos={listOfAlgos}
-          startVisualization={startVisualization}
-        />
-        <button
-          className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded m-4"
-          onClick={() => {
-            if (!isAnimating) startVisualization();
-          }}
-        >
-          Visualize!
-        </button>
+      <div className="navbar bg-base-100 justify-center">
+        <div className="m-5 bg-slate-400">
+          <Dropdown
+            changeAlgo={setPathfindingAlgo}
+            currentAlgo={pathfindingAlgo}
+            listOfAlgos={listOfAlgos}
+            startVisualization={startVisualization}
+          />
+          <Button
+            text="Visualize!"
+            isAnimating={isAnimating}
+            extraClassName="btn-disabled loading"
+            handleClick={() => startVisualization()}
+          />
+          <Button
+            text="Generate Maze!"
+            isAnimating={isAnimating}
+            extraClassName="btn-disabled"
+            handleClick={() => handleMazeGeneration()}
+          />
+          <Button
+            text="Clear Board!"
+            isAnimating={isAnimating}
+            extraClassName="btn-disabled"
+            handleClick={() => setNodeList(initializeMatrix())}
+          />
+        </div>
       </div>
-      <div className="mx-28 my-24">
+      <div>
         {showModal && (
           <Modal
             header="Couldn't find the most optimal path"
@@ -210,15 +229,14 @@ const App: React.FC = () => {
 
 export default App;
 
-// Initiliaze a 15 row by 50 col matrix
-// Matrix size is hard coded here
-const initializeMatrix = (): NodeType[][] => {
+// Initiliaze the matrix
+export const initializeMatrix = (): NodeType[][] => {
   const nodeList: NodeType[][] = [];
 
-  for (let rowIdx = 0; rowIdx < 15; rowIdx++) {
+  for (let rowIdx = 0; rowIdx < MATRIX_ROWS; rowIdx++) {
     const currentRow: NodeType[] = [];
 
-    for (let colIdx = 0; colIdx < 50; colIdx++) {
+    for (let colIdx = 0; colIdx < MATRIX_COLS; colIdx++) {
       const currentNode: NodeType = {
         row: rowIdx,
         col: colIdx,
