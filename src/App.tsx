@@ -16,6 +16,7 @@ const App: React.FC = () => {
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
   const [showModal, setshowModal] = useState<boolean>(false);
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
 
   const listOfAlgos = ["BFS", "DFS"];
 
@@ -55,6 +56,9 @@ const App: React.FC = () => {
     visitPath: NodeType[],
     shortestPath: NodeType[]
   ): void => {
+    // Set isAnimating to true to prevent interaction with the grid
+    setIsAnimating(true);
+
     // Create a copy of nodeList that only keeps walls
     const nodeListWithWalls = [...nodeList];
 
@@ -73,35 +77,53 @@ const App: React.FC = () => {
     // Reset nodeList to all default nodes
     setNodeList(initializeMatrix());
 
+    const animateShortestPath = (): void => {
+      shortestPath.forEach((node, idx) => {
+        // Allow interaction with the grid again
+        if (idx === shortestPath.length - 1) {
+          setIsAnimating(false);
+        }
+
+        setTimeout(() => {
+          const newMatrix = [...nodeListWithWalls];
+          newMatrix[node.row][node.col].isShortestPath = true;
+          setNodeList(newMatrix);
+        }, 25 * idx);
+      });
+
+      // Shows error modal in case the end node can't be reached
+      if (!nodeList[FINISH_ROW][FINISH_COL].isVisited) {
+        setshowModal(true);
+
+        setTimeout(() => {
+          setshowModal(false);
+        }, 2000);
+      }
+    };
+
     // Animate the algorithm
     visitPath.forEach((node, idx) => {
+      // Animate the shortest path when the main path is done
+      if (idx === visitPath.length - 1) {
+        console.log("found");
+
+        setTimeout(() => {
+          animateShortestPath();
+        }, 5 * idx);
+      }
+
       setTimeout(() => {
         const newMatrix = [...nodeListWithWalls];
         newMatrix[node.row][node.col].isVisited = true;
         setNodeList(newMatrix);
       }, 5 * idx);
     });
-
-    // Animate the shortest path
-    shortestPath.forEach((node, idx) => {
-      setTimeout(() => {
-        const newMatrix = [...nodeListWithWalls];
-        newMatrix[node.row][node.col].isShortestPath = true;
-        setNodeList(newMatrix);
-      }, 20 * idx);
-    });
-
-    if (!nodeList[FINISH_ROW][FINISH_COL].isVisited) {
-      setshowModal(true);
-
-      setTimeout(() => {
-        setshowModal(false);
-      }, 2000);
-    }
   };
 
   // Handle wall toggle with mouse events
   const toggleWall = (rowIdx: number, colIdx: number) => {
+    if (isAnimating) return;
+
     const newMatrix = [...nodeList];
     const node = newMatrix[rowIdx][colIdx];
     const newNode = { ...node, isWall: !node.isWall };
@@ -110,16 +132,22 @@ const App: React.FC = () => {
   };
 
   const handleMouseDown = (rowIdx: number, colIdx: number) => {
+    if (isAnimating) return;
+
     toggleMouseIsDown(true);
     toggleWall(rowIdx, colIdx);
   };
 
   const handleMouseUp = () => {
+    if (isAnimating) return;
+
     toggleMouseIsDown(false);
   };
 
   // Only works if mouse is held down and being dragged
   const handleMouseEnter = (rowIdx: number, colIdx: number) => {
+    if (isAnimating) return;
+
     if (mouseIsDown) {
       toggleWall(rowIdx, colIdx);
     }
@@ -136,7 +164,9 @@ const App: React.FC = () => {
         />
         <button
           className="bg-blue-500 hover:bg-blue-400 text-white font-bold py-2 px-4 border-b-4 border-blue-700 hover:border-blue-500 rounded m-4"
-          onClick={() => startVisualization()}
+          onClick={() => {
+            if (!isAnimating) startVisualization();
+          }}
         >
           Visualize!
         </button>
@@ -212,7 +242,6 @@ const initializeMatrix = (): NodeType[][] => {
 };
 
 // TODO: Maze Generation (Binary Tree, Kruskal's, Prim's)
-// TODO: More Pathfinding Algorithms (A*, Djikstra)
-// TODO: Prevent clicking while animating
-// TODO: Add a reset button
 // TODO: Change start/end node
+// TODO: More Pathfinding Algorithms (A*, Djikstra)
+// TODO: Add a reset button
