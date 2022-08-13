@@ -12,8 +12,7 @@
 - Data Structures & Pathfinding Algorithms (Breadth-first Search, Depth-first Search, etc.)
 
 ### Demo of the web app
-> (To be added)
-
+> ![demo1](https://user-images.githubusercontent.com/77269201/184480531-8c54b2a8-2b86-4227-a2a7-0467ca4ab3ae.gif)
 
 References:
 > - (To be added)
