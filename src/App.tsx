@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Node, { NodeType } from "./Components/Node";
-import { BFS } from "./Algorithms/Pathfinding/BFS";
-import { DFS } from "./Algorithms/Pathfinding/DFS";
-import { randomMaze } from "./Algorithms/MazeGeneration/randomMaze";
+import BFS from "./Algorithms/Pathfinding/BFS";
+import DFS from "./Algorithms/Pathfinding/DFS";
+import randomMaze from "./Algorithms/MazeGeneration/randomMaze";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
 
-// Hardcoded start and finish nodes
+// Hardcoded start, end, and matrix size
 const START_ROW: number = 7;
 const START_COL: number = 10;
 const FINISH_ROW: number = 7;
@@ -21,6 +21,7 @@ const App: React.FC = () => {
   const [showModal, setshowModal] = useState<boolean>(false);
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
 
   const listOfAlgos = ["BFS", "DFS"];
 
@@ -63,6 +64,9 @@ const App: React.FC = () => {
     // Set isAnimating to true to prevent interaction with the grid
     setIsAnimating(true);
 
+    // Set needToClearBoard to true to clear the board after the animation
+    setNeedToClearBoard(true);
+
     // Create a copy of nodeList that only keeps walls
     const nodeListWithWalls = [...nodeList];
 
@@ -83,15 +87,15 @@ const App: React.FC = () => {
 
     const animateShortestPath = (): void => {
       shortestPath.forEach((node, idx) => {
-        // Allow interaction with the grid again
-        if (idx === shortestPath.length - 1) {
-          setIsAnimating(false);
-        }
-
         setTimeout(() => {
           const newMatrix = [...nodeListWithWalls];
           newMatrix[node.row][node.col].isShortestPath = true;
           setNodeList(newMatrix);
+
+          // Allow interaction with the grid again when visualization finishes
+          if (idx === shortestPath.length - 1) {
+            setIsAnimating(false);
+          }
         }, 25 * idx);
       });
 
@@ -105,26 +109,30 @@ const App: React.FC = () => {
       }
     };
 
-    // Animate the algorithm
-    visitPath.forEach((node, idx) => {
-      // Animate the shortest path when the main path is done
-      if (idx === visitPath.length - 1) {
-        console.log("found");
+    const animateVisitPath = (): void => {
+      visitPath.forEach((node, idx) => {
+        // Animate the shortest path when the main path is done
+        if (idx === visitPath.length - 1) {
+          console.log("found");
+
+          setTimeout(() => {
+            animateShortestPath();
+          }, 5 * idx);
+        }
 
         setTimeout(() => {
-          animateShortestPath();
+          const newMatrix = [...nodeListWithWalls];
+          newMatrix[node.row][node.col].isVisited = true;
+          setNodeList(newMatrix);
         }, 5 * idx);
-      }
+      });
+    };
 
-      setTimeout(() => {
-        const newMatrix = [...nodeListWithWalls];
-        newMatrix[node.row][node.col].isVisited = true;
-        setNodeList(newMatrix);
-      }, 5 * idx);
-    });
+    // Animate all visited nodes, followed by the shortest path
+    animateVisitPath();
   };
 
-  const toggleWall = (rowIdx: number, colIdx: number) => {
+  const toggleWall = (rowIdx: number, colIdx: number): void => {
     if (isAnimating) return;
 
     const newMatrix = [...nodeList];
@@ -134,63 +142,64 @@ const App: React.FC = () => {
     setNodeList(newMatrix);
   };
 
-  const handleMouseDown = (rowIdx: number, colIdx: number) => {
+  const handleMouseDown = (rowIdx: number, colIdx: number): void => {
     if (isAnimating) return;
 
     toggleMouseIsDown(true);
     toggleWall(rowIdx, colIdx);
+    setNeedToClearBoard(true);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (): void => {
     if (isAnimating) return;
 
     toggleMouseIsDown(false);
   };
 
   // Only works if mouse is held down and being dragged
-  const handleMouseEnter = (rowIdx: number, colIdx: number) => {
+  const handleMouseEnter = (rowIdx: number, colIdx: number): void => {
     if (isAnimating) return;
 
     if (mouseIsDown) {
       toggleWall(rowIdx, colIdx);
+      setNeedToClearBoard(true);
     }
   };
 
-  const handleMazeGeneration = () => {
+  const handleMazeGeneration = (): void => {
     setNodeList(randomMaze(nodeList));
+    setNeedToClearBoard(true);
+  };
+
+  const handleClearBoard = (): void => {
+    setNodeList(initializeMatrix());
+    setNeedToClearBoard(false);
   };
 
   return (
     <div className="flex flex-col">
-      <div className="navbar bg-base-100 justify-center">
-        <div className="m-5 bg-slate-400">
-          <Dropdown
-            changeAlgo={setPathfindingAlgo}
-            currentAlgo={pathfindingAlgo}
-            listOfAlgos={listOfAlgos}
-            startVisualization={startVisualization}
-          />
-          <Button
-            text="Visualize!"
-            isAnimating={isAnimating}
-            extraClassName="btn-disabled loading"
-            handleClick={() => startVisualization()}
-          />
-          <Button
-            text="Generate Maze!"
-            isAnimating={isAnimating}
-            extraClassName="btn-disabled"
-            handleClick={() => handleMazeGeneration()}
-          />
-          <Button
-            text="Clear Board!"
-            isAnimating={isAnimating}
-            extraClassName="btn-disabled"
-            handleClick={() => setNodeList(initializeMatrix())}
-          />
-        </div>
+      <div className="flex flex-row align-middle justify-center bg-gray-400 rounded-lg m-5">
+        <Dropdown changeAlgo={setPathfindingAlgo} listOfAlgos={listOfAlgos} />
+        <Button
+          text="Visualize!"
+          isClickable={!isAnimating}
+          extraClassName="btn-disabled loading"
+          handleClick={startVisualization}
+        />
+        <Button
+          text="Generate Maze!"
+          isClickable={!isAnimating}
+          extraClassName="btn-disabled"
+          handleClick={handleMazeGeneration}
+        />
+        <Button
+          text="Clear Board!"
+          isClickable={!isAnimating && needToClearBoard}
+          extraClassName="btn-disabled"
+          handleClick={handleClearBoard}
+        />
       </div>
-      <div>
+      <div className="">
         {showModal && (
           <Modal
             header="Couldn't find the most optimal path"
@@ -229,7 +238,6 @@ const App: React.FC = () => {
 
 export default App;
 
-// Initiliaze the matrix
 export const initializeMatrix = (): NodeType[][] => {
   const nodeList: NodeType[][] = [];
 
@@ -259,7 +267,9 @@ export const initializeMatrix = (): NodeType[][] => {
   return nodeList;
 };
 
-// TODO: Maze Generation (Binary Tree, Kruskal's, Prim's)
-// TODO: Change start/end node
-// TODO: More Pathfinding Algorithms (A*, Djikstra)
+// TODO: More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division)
+// TODO: Let user pick start and end nodes
+// TODO: Let user pick matrix size
+// TODO: Let user pick visualization speed
 // TODO: Add a reset button
+// TODO: More Pathfinding Algorithms (A*, Djikstra)

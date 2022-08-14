@@ -2,17 +2,10 @@ import React, { Dispatch, SetStateAction } from "react";
 
 type DropdownProps = {
   changeAlgo: Dispatch<SetStateAction<string>>;
-  currentAlgo: string;
   listOfAlgos: string[];
-  startVisualization: () => void;
 };
 
-const Dropdown: React.FC<DropdownProps> = ({
-  changeAlgo,
-  listOfAlgos,
-  currentAlgo,
-  startVisualization,
-}) => {
+const Dropdown: React.FC<DropdownProps> = ({ changeAlgo, listOfAlgos }) => {
   return (
     <div className="flex flex-row py-2 px-4">
       <div className="dropdown dropdown-hover">
@@ -34,29 +27,6 @@ const Dropdown: React.FC<DropdownProps> = ({
       </div>
     </div>
   );
-
-  // return (
-  //   <div>
-  //     <div className="form-control">
-  //       <div className="input-group">
-  //         <select className="select select-bordered">
-  //           <option disabled selected>
-  //             Pick category
-  //           </option>
-  //           {listOfAlgos.map((algo: string) => {
-  //             return (
-  //               <option>
-  //                 <div onClick={() => console.log(algo)}>{algo}</div>
-  //               </option>
-  //             );
-  //           })}
-  //         </select>
-  //         <button className="btn">Go</button>
-  //         <text>{currentAlgo}</text>
-  //       </div>
-  //     </div>
-  //   </div>
-  // );
 };
 
 export default Dropdown;

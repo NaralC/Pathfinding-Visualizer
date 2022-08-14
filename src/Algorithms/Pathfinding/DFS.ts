@@ -1,6 +1,6 @@
-import { NodeType } from "../Components/Node";
+import { NodeType } from "../../Components/Node";
 
-export const DFS = (
+const DFS = (
   matrix: NodeType[][],
   startNode: NodeType,
   endNode: NodeType
@@ -73,3 +73,5 @@ export const DFS = (
 
   return { visitPath: visitOrder, shortestPath: getShortestPath() };
 };
+
+export default DFS;

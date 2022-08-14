@@ -1,7 +1,7 @@
 import { initializeMatrix } from "../../App";
 import { NodeType } from "../../Components/Node";
 
-export const randomMaze = (matrix: NodeType[][]): NodeType[][] => {
+const randomMaze = (matrix: NodeType[][]): NodeType[][] => {
   const dummyMatrix = initializeMatrix();
 
   for (let row = 0; row < matrix.length; row++) {
@@ -10,7 +10,7 @@ export const randomMaze = (matrix: NodeType[][]): NodeType[][] => {
       if (matrix[row][col].isStart || matrix[row][col].isFinish) continue;
 
       // The "random" part
-      if (Math.random() < 0.25) {
+      if (Math.random() < 0.3) {
         dummyMatrix[row][col].isWall = true;
       }
     }
@@ -18,3 +18,5 @@ export const randomMaze = (matrix: NodeType[][]): NodeType[][] => {
 
   return dummyMatrix;
 };
+
+export default randomMaze;

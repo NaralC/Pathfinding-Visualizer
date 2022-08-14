@@ -3,22 +3,22 @@ import "./Button.css";
 
 type Props = {
   text: string;
-  isAnimating: boolean;
+  isClickable: boolean;
   extraClassName: string;
   handleClick: () => void;
 };
 
 const Button: React.FC<Props> = ({
   text,
-  isAnimating,
+  isClickable,
   extraClassName,
   handleClick,
 }) => {
   return (
     <button
-      className={`button ${isAnimating ? extraClassName : ""}`}
+      className={`button ${isClickable ? "" : extraClassName}`}
       onClick={() => {
-        if (!isAnimating) handleClick();
+        if (isClickable) handleClick();
       }}
     >
       {text}
