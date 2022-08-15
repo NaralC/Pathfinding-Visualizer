@@ -3,6 +3,7 @@ import Node, { NodeType } from "./Components/Node";
 import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
 import randomMaze from "./Algorithms/MazeGeneration/randomMaze";
+import horizontalDivision from "./Algorithms/MazeGeneration/horizontalDivision";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
@@ -22,6 +23,7 @@ const App: React.FC = () => {
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
+  const [canVisualize, SetcanVisualize] = useState<boolean>(true);
 
   const listOfAlgos = ["BFS", "DFS"];
 
@@ -66,6 +68,9 @@ const App: React.FC = () => {
 
     // Set needToClearBoard to true to clear the board after the animation
     setNeedToClearBoard(true);
+
+    // Set canVisualize to false to prevent the user from clicking the visualize button again
+    SetcanVisualize(false);
 
     // Create a copy of nodeList that only keeps walls
     const nodeListWithWalls = [...nodeList];
@@ -167,13 +172,15 @@ const App: React.FC = () => {
   };
 
   const handleMazeGeneration = (): void => {
-    setNodeList(randomMaze(nodeList));
+    setNodeList(horizontalDivision(nodeList));
     setNeedToClearBoard(true);
+    SetcanVisualize(true);
   };
 
   const handleClearBoard = (): void => {
     setNodeList(initializeMatrix());
     setNeedToClearBoard(false);
+    SetcanVisualize(true);
   };
 
   return (
@@ -182,7 +189,7 @@ const App: React.FC = () => {
         <Dropdown changeAlgo={setPathfindingAlgo} listOfAlgos={listOfAlgos} />
         <Button
           text="Visualize!"
-          isClickable={!isAnimating}
+          isClickable={!isAnimating && canVisualize}
           extraClassName="btn-disabled loading"
           handleClick={startVisualization}
         />
@@ -267,9 +274,8 @@ export const initializeMatrix = (): NodeType[][] => {
   return nodeList;
 };
 
-// TODO: More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division)
+// TODO: More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division, Horizontal Division)
+// TODO: More Pathfinding Algorithms (A*, Djikstra)
 // TODO: Let user pick start and end nodes
 // TODO: Let user pick matrix size
-// TODO: Let user pick visualization speed
-// TODO: Add a reset button
-// TODO: More Pathfinding Algorithms (A*, Djikstra)
+// TODO: Animatino for maze generation perhaps?

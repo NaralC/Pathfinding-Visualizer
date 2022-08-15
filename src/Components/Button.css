@@ -3,5 +3,5 @@
 @tailwind utilities;
 
 .button {
-  @apply btn btn-primary m-3 btn-md;
+  @apply btn btn-primary m-3;
 }
