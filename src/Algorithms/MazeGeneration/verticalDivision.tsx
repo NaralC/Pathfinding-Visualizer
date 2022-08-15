@@ -2,16 +2,16 @@ import { initializeMatrix } from "../../App";
 import { NodeType } from "../../Components/Node";
 
 const horizontalDivision = (matrix: NodeType[][]): NodeType[][] => {
-  const addWall = (col: number): void => {
+  const addWall = (row: number): void => {
     let isStartOrFinish = false;
     let tempWalls: { col: number; row: number }[] = [];
 
-    for (let row = 0; row < height; row++) {
+    for (let col = 0; col < width; col++) {
       if (matrix[row][col].isStart || matrix[row][col].isFinish) {
         isStartOrFinish = true;
         continue;
       }
-      tempWalls.push({ col, row });
+      tempWalls.push({ row, col });
     }
 
     if (!isStartOrFinish) {
@@ -31,14 +31,15 @@ const horizontalDivision = (matrix: NodeType[][]): NodeType[][] => {
 
   const decision = Math.floor(Math.random() * 2);
 
-  for (let col = 0; col < width; col++) {
+  for (let row = 0; row < height; row++) {
     if (
-      (decision === 0 && col % 2 !== 0) ||
-      (decision === 1 && col % 2 === 0)
+      (decision === 0 && row % 2 !== 0) ||
+      (decision === 1 && row % 2 === 0)
     ) {
-      addWall(col);
+      addWall(row);
     }
   }
+  console.log(dummyMatrix);
 
   return dummyMatrix;
 };

@@ -4,6 +4,7 @@ import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
 import randomMaze from "./Algorithms/MazeGeneration/randomMaze";
 import horizontalDivision from "./Algorithms/MazeGeneration/horizontalDivision";
+import verticalDivision from "./Algorithms/MazeGeneration/verticalDivision";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
@@ -172,7 +173,7 @@ const App: React.FC = () => {
   };
 
   const handleMazeGeneration = (): void => {
-    setNodeList(horizontalDivision(nodeList));
+    setNodeList(verticalDivision(nodeList));
     setNeedToClearBoard(true);
     SetcanVisualize(true);
   };
