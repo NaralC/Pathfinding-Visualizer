@@ -10,10 +10,10 @@ import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
 
 // Hardcoded start, end, and matrix size
-const START_ROW: number = 7;
-const START_COL: number = 10;
-const FINISH_ROW: number = 7;
-const FINISH_COL: number = 40;
+let START_ROW: number = 7;
+let START_COL: number = 10;
+let FINISH_ROW: number = 7;
+let FINISH_COL: number = 40;
 const MATRIX_ROWS: number = 15;
 const MATRIX_COLS: number = 50;
 
@@ -26,6 +26,9 @@ const App: React.FC = () => {
   const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
   const [canVisualize, setCanVisualize] = useState<boolean>(true);
   const [mazeGenAlgo, setMazeGenAlgo] = useState<string>("Random");
+  const [isHoldingStartOrEnd, setIsHoldingStartOrEnd] = useState<string | null>(
+    null
+  );
 
   const listOfAlgos: string[] = ["BFS", "DFS"];
   const listOfMazes: string[] = [
@@ -158,12 +161,41 @@ const App: React.FC = () => {
     if (isAnimating) return;
 
     toggleMouseIsDown(true);
+
+    if (nodeList[rowIdx][colIdx].isStart) {
+      setIsHoldingStartOrEnd("start");
+      return;
+    } else if (nodeList[rowIdx][colIdx].isFinish) {
+      setIsHoldingStartOrEnd("finish");
+      return;
+    }
+
     toggleWall(rowIdx, colIdx);
     setNeedToClearBoard(true);
   };
 
-  const handleMouseUp = (): void => {
+  const handleMouseUp = (rowIdx: number, colIdx: number): void => {
     if (isAnimating) return;
+
+    if (isHoldingStartOrEnd) {
+      const tempNodeList = [...nodeList];
+
+      // Get rid of the start/end node
+      if (isHoldingStartOrEnd === "start") {
+        tempNodeList[START_ROW][START_COL].isStart = false;
+        START_ROW = rowIdx;
+        START_COL = colIdx;
+        tempNodeList[START_ROW][START_COL].isStart = true;
+      } else if (isHoldingStartOrEnd === "finish") {
+        tempNodeList[FINISH_ROW][FINISH_COL].isFinish = false;
+        FINISH_ROW = rowIdx;
+        FINISH_COL = colIdx;
+        tempNodeList[FINISH_ROW][FINISH_COL].isFinish = true;
+      }
+
+      setNodeList(tempNodeList);
+      setIsHoldingStartOrEnd(null);
+    }
 
     toggleMouseIsDown(false);
   };
@@ -172,7 +204,7 @@ const App: React.FC = () => {
   const handleMouseEnter = (rowIdx: number, colIdx: number): void => {
     if (isAnimating) return;
 
-    if (mouseIsDown) {
+    if (mouseIsDown && !isHoldingStartOrEnd) {
       toggleWall(rowIdx, colIdx);
       setNeedToClearBoard(true);
     }
@@ -267,7 +299,7 @@ const App: React.FC = () => {
                   isShortestPath={col.isShortestPath}
                   previousNode={col.previousNode}
                   onMouseDown={() => handleMouseDown(rowIdx, colIdx)}
-                  onMouseUp={() => handleMouseUp()}
+                  onMouseUp={() => handleMouseUp(rowIdx, colIdx)}
                   onMouseEnter={() => handleMouseEnter(rowIdx, colIdx)}
                 ></Node>
               ))}
@@ -310,7 +342,7 @@ export const initializeMatrix = (): NodeType[][] => {
   return nodeList;
 };
 
-// TODO: More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division, Horizontal Division)
+// TODO: More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's)
 // TODO: More Pathfinding Algorithms (A*, Djikstra)
 // TODO: Let user pick start and end nodes
 // TODO: Let user pick matrix size
