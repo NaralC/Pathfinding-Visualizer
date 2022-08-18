@@ -5,7 +5,7 @@
 .node {
   @apply 2xl:w-6 2xl:h-6 xl:mx-0.5 xl:my-0.5 2xl:mx-1
   lg:w-4 lg:h-4 md:mx-0.5 md:my-0.5 
-  sm:w-3.5 sm:h-3.5 sm:m-0.5 
+  sm:w-3 sm:h-3 sm:m-0.5 
   inline-block border-solid border-2 border-gray-500
   ease-in-out duration-500;
 }

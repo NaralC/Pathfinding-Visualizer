@@ -12,9 +12,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   listOfItems,
 }) => {
   return (
-    <div className="flex flex-row py-2 px-4">
-      <div className="dropdown dropdown-hover">
-        <label tabIndex={0} className="btn m-1">
+    <div className="">
+      <div className="dropdown dropdown-hover drop">
+        <label tabIndex={0} className="button btn-secondary">
           {displayText}
         </label>
         <ul
@@ -23,7 +23,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         >
           {listOfItems.map((item: string) => {
             return (
-              <li>
+              <li key={item}>
                 <a onClick={() => changeSelected(item)}>{item}</a>
               </li>
             );
