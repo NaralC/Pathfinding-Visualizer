@@ -24,9 +24,15 @@ const App: React.FC = () => {
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
   const [isAnimating, setIsAnimating] = useState<boolean>(false);
   const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
-  const [canVisualize, SetcanVisualize] = useState<boolean>(true);
+  const [canVisualize, setCanVisualize] = useState<boolean>(true);
+  const [mazeGenAlgo, setMazeGenAlgo] = useState<string>("Random");
 
-  const listOfAlgos = ["BFS", "DFS"];
+  const listOfAlgos: string[] = ["BFS", "DFS"];
+  const listOfMazes: string[] = [
+    "Random",
+    "Horizontal Division",
+    "Vertical Division",
+  ];
 
   const startVisualization = (): void => {
     let data;
@@ -71,7 +77,7 @@ const App: React.FC = () => {
     setNeedToClearBoard(true);
 
     // Set canVisualize to false to prevent the user from clicking the visualize button again
-    SetcanVisualize(false);
+    setCanVisualize(false);
 
     // Create a copy of nodeList that only keeps walls
     const nodeListWithWalls = [...nodeList];
@@ -173,21 +179,50 @@ const App: React.FC = () => {
   };
 
   const handleMazeGeneration = (): void => {
-    setNodeList(verticalDivision(nodeList));
+    console.log(mazeGenAlgo);
+
+    switch (mazeGenAlgo) {
+      case "Random":
+        setNodeList(randomMaze(nodeList));
+        break;
+
+      case "Horizontal Division":
+        setNodeList(horizontalDivision(nodeList));
+        break;
+
+      case "Vertical Division":
+        setNodeList(verticalDivision(nodeList));
+        break;
+
+      default:
+        setNodeList(randomMaze(nodeList));
+        console.log("DEFAULTS TO RANDOM GENERATION");
+        break;
+    }
+
     setNeedToClearBoard(true);
-    SetcanVisualize(true);
+    setCanVisualize(true);
   };
 
   const handleClearBoard = (): void => {
     setNodeList(initializeMatrix());
     setNeedToClearBoard(false);
-    SetcanVisualize(true);
+    setCanVisualize(true);
   };
 
   return (
     <div className="flex flex-col">
       <div className="flex flex-row align-middle justify-center bg-gray-400 rounded-lg m-5">
-        <Dropdown changeAlgo={setPathfindingAlgo} listOfAlgos={listOfAlgos} />
+        <Dropdown
+          displayText="Pick an Algorithm!"
+          changeSelected={setPathfindingAlgo}
+          listOfItems={listOfAlgos}
+        />
+        <Dropdown
+          displayText="Pick a Maze Generator!"
+          changeSelected={setMazeGenAlgo}
+          listOfItems={listOfMazes}
+        />
         <Button
           text="Visualize!"
           isClickable={!isAnimating && canVisualize}
