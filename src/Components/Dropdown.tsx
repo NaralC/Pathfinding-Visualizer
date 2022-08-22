@@ -19,12 +19,12 @@ const Dropdown: React.FC<DropdownProps> = ({
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-52"
+          className="dropdown-content menu p-2 md:text-xs lg:text-sm 2xl:text-lg shadow bg-white rounded-box w-52"
         >
           {listOfItems.map((item: string) => {
             return (
-              <li key={item}>
-                <a onClick={() => changeSelected(item)}>{item}</a>
+              <li key={item} className="">
+                <div onClick={() => changeSelected(item)}>{item}</div>
               </li>
             );
           })}

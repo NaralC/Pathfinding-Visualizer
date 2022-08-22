@@ -243,7 +243,7 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col flex-shink-0">
       <div className="flex flex-row align-middle justify-center bg-gray-400 rounded-lg m-5">
         <Dropdown
           displayText="Pick an Algorithm!"
@@ -346,4 +346,5 @@ export const initializeMatrix = (): NodeType[][] => {
 // TODO: More Pathfinding Algorithms (A*, Djikstra)
 // TODO: Let user pick start and end nodes
 // TODO: Let user pick matrix size
-// TODO: Animatino for maze generation perhaps?
+// TODO: Animation for maze generation perhaps?
+// TODO: Light and dark theme

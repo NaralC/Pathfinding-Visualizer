@@ -30,7 +30,7 @@ const Node: React.FC<NodeType> = (props) => {
       onMouseDown={() => props.onMouseDown()}
       onMouseUp={() => props.onMouseUp()}
       onMouseEnter={() => props.onMouseEnter()}
-      className={`node ${nodeState()} delay-25`}
+      className={`node ${nodeState()}`}
     ></div>
   );
 };
