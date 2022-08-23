@@ -19,9 +19,9 @@ const Node: React.FC<NodeType> = (props) => {
   const nodeState = (): string => {
     if (props.isStart) return "bg-green-400";
     if (props.isFinish) return "bg-red-400";
-    if (props.isWall) return "bg-black";
-    if (props.isShortestPath) return "bg-yellow-400";
-    if (props.isVisited) return "bg-blue-400";
+    if (props.isWall) return "node-wall";
+    if (props.isShortestPath) return "shortest-path";
+    if (props.isVisited) return "node-visited";
 
     return "bg-gray-400";
   };
