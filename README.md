@@ -3,7 +3,7 @@
 
 
 ### Link to site
-> - (To be added)
+> - https://pathfinding-visualizer-two.vercel.app/
   
 #### With the introduction of countless frontend concepts during my first internship, I aim to practice and broaden my understanding on them. Such concepts and technologies include, but are not limited to:
 - ReactJS (Functional Components & Basic Hooks)
