@@ -8,6 +8,7 @@ import verticalDivision from "./Algorithms/MazeGeneration/verticalDivision";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
+import ToggleThemeBtn from "./Components/toggleThemeBtn";
 
 // Hardcoded start, end, and matrix size
 let START_ROW: number = 7;
@@ -18,17 +19,23 @@ const MATRIX_ROWS: number = 15;
 const MATRIX_COLS: number = 50;
 
 const App: React.FC = () => {
+  // Lists of data
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
-  const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
-  const [showModal, setshowModal] = useState<boolean>(false);
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
-  const [isAnimating, setIsAnimating] = useState<boolean>(false);
-  const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
-  const [canVisualize, setCanVisualize] = useState<boolean>(true);
   const [mazeGenAlgo, setMazeGenAlgo] = useState<string>("Random");
+  const [theme, setTheme] = useState<string>("Light");
+
+  // Mouse events
+  const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
   const [isHoldingStartOrEnd, setIsHoldingStartOrEnd] = useState<string | null>(
     null
   );
+
+  // Board states
+  const [isAnimating, setIsAnimating] = useState<boolean>(false);
+  const [showModal, setshowModal] = useState<boolean>(false);
+  const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
+  const [canVisualize, setCanVisualize] = useState<boolean>(true);
 
   const listOfAlgos: string[] = ["BFS", "DFS"];
   const listOfMazes: string[] = [
@@ -243,16 +250,16 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col flex-shink-0">
+    <div className="flex flex-col flex-shink-1">
       <div className="flex flex-row align-middle justify-center bg-gray-400 rounded-lg m-5">
         <Dropdown
           displayText="Pick an Algorithm!"
-          changeSelected={setPathfindingAlgo}
+          handleClick={setPathfindingAlgo}
           listOfItems={listOfAlgos}
         />
         <Dropdown
           displayText="Pick a Maze Generator!"
-          changeSelected={setMazeGenAlgo}
+          handleClick={setMazeGenAlgo}
           listOfItems={listOfMazes}
         />
         <Button
@@ -273,6 +280,7 @@ const App: React.FC = () => {
           extraClassName="btn-disabled"
           handleClick={handleClearBoard}
         />
+        <ToggleThemeBtn changeTheme={setTheme} currentTheme={theme} />
       </div>
       <div className="">
         {showModal && (
@@ -342,9 +350,10 @@ export const initializeMatrix = (): NodeType[][] => {
   return nodeList;
 };
 
-// TODO: More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's)
-// TODO: More Pathfinding Algorithms (A*, Djikstra)
-// TODO: Let user pick start and end nodes
-// TODO: Let user pick matrix size
-// TODO: Animation for maze generation perhaps?
-// TODO: Light and dark theme
+// TODO:
+// More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's)
+// More Pathfinding Algorithms (A*, Djikstra)
+// Let user pick matrix size
+// Light and dark theme
+// Let user pick start and end nodes (still buggy)
+// Wall animation is slightly off when visualization starts

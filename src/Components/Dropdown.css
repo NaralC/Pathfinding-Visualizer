@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-.dropdown-sizes {
+.dropdown-clickables {
   @apply;
-}
-
-.button {
-  @apply btn btn-primary m-3
-    2xl:btn-lg
-    lg:btn-md
-    sm:btn-sm;
 }

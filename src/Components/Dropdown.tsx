@@ -2,13 +2,13 @@ import React, { Dispatch, SetStateAction } from "react";
 
 type DropdownProps = {
   displayText: string;
-  changeSelected: Dispatch<SetStateAction<string>>;
+  handleClick: Dispatch<SetStateAction<string>>;
   listOfItems: string[];
 };
 
 const Dropdown: React.FC<DropdownProps> = ({
   displayText,
-  changeSelected,
+  handleClick,
   listOfItems,
 }) => {
   return (
@@ -19,12 +19,12 @@ const Dropdown: React.FC<DropdownProps> = ({
         </label>
         <ul
           tabIndex={0}
-          className="dropdown-content menu p-2 md:text-xs lg:text-sm 2xl:text-lg shadow bg-white rounded-box w-52"
+          className="dropdown-content menu p-2 md:text-xs lg:text-sm 2xl:text-lg shadow bg-white rounded-box min-w-full"
         >
           {listOfItems.map((item: string) => {
             return (
               <li key={item} className="">
-                <div onClick={() => changeSelected(item)}>{item}</div>
+                <div onClick={() => handleClick(item)}>{item}</div>
               </li>
             );
           })}
