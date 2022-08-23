@@ -8,7 +8,6 @@ import verticalDivision from "./Algorithms/MazeGeneration/verticalDivision";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
-import ToggleThemeBtn from "./Components/toggleThemeBtn";
 
 // Hardcoded start, end, and matrix size
 let START_ROW: number = 7;
@@ -280,7 +279,6 @@ const App: React.FC = () => {
           extraClassName="btn-disabled"
           handleClick={handleClearBoard}
         />
-        <ToggleThemeBtn changeTheme={setTheme} currentTheme={theme} />
       </div>
       <div className="">
         {showModal && (
