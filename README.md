@@ -3,16 +3,16 @@
 
 
 ### Link to site
-> - https://pathfinding-visualizer-two.vercel.app/
+> - https://pathfinding-visualizer-tailwind.vercel.app/
   
 #### With the introduction of countless frontend concepts during my first internship, I aim to practice and broaden my understanding on them. Such concepts and technologies include, but are not limited to:
 - ReactJS (Functional Components & Basic Hooks)
 - TypeScript in General
 - Tailwind CSS & daisyUI (Animations & Responsiveness)
-- Data Structures & Pathfinding Algorithms (Breadth-first Search, Depth-first Search, etc.)
+- Data Structures & Pathfinding/Maze Generation Algorithms (Breadth-first Search, Depth-first Search, etc.)
 
 ### Demo of the web app
-> ![demo1](https://user-images.githubusercontent.com/77269201/184480531-8c54b2a8-2b86-4227-a2a7-0467ca4ab3ae.gif)
+> (To be added)
 
 References:
 > - (To be added)
