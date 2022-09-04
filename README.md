@@ -11,8 +11,5 @@
 - Tailwind CSS & daisyUI (Animations & Responsiveness)
 - Data Structures & Pathfinding/Maze Generation Algorithms (Breadth-first Search, Depth-first Search, etc.)
 
-### Demo of the web app
-> (To be added)
-
 References:
 > - (To be added)
