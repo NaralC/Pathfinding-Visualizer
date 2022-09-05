@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Node, { NodeType } from "./Components/Node";
 import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
@@ -22,7 +22,6 @@ const App: React.FC = () => {
   const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
   const [mazeGenAlgo, setMazeGenAlgo] = useState<string>("Random");
-  const [theme, setTheme] = useState<string>("Light");
 
   // Mouse events
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
@@ -250,7 +249,7 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col flex-shink-1">
-      <div className="flex flex-row align-middle justify-center bg-gray-400 rounded-lg m-5">
+      <div className="flex flex-row justify-center bg-gray-400 rounded m-5">
         <Dropdown
           displayText="Pick an Algorithm!"
           handleClick={setPathfindingAlgo}
@@ -280,7 +279,7 @@ const App: React.FC = () => {
           handleClick={handleClearBoard}
         />
       </div>
-      <div className="">
+      <div className="items-center container mx-auto">
         {showModal && (
           <Modal
             header="Couldn't find the most optimal path"
@@ -348,10 +347,11 @@ export const initializeMatrix = (): NodeType[][] => {
   return nodeList;
 };
 
-// TODO:
-// More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's)
+// TODO: Functionalities
+// More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division)
 // More Pathfinding Algorithms (A*, Djikstra)
 // Let user pick matrix size
-// Light and dark theme
+
+// TODO: Improvements
 // Let user pick start and end nodes (still buggy)
 // Wall animation is slightly off when visualization starts

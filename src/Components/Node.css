@@ -12,7 +12,6 @@
 
 .node-visited {
   @apply bg-sky-600 animate-visit_node_animation;
-  /* animation-fill-mode: forwards; */
 }
 
 .node-wall {
