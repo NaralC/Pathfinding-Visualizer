@@ -1,4 +1,4 @@
-import { initializeMatrix } from "../../App";
+import { initializeMatrix } from "../Utility";
 import { NodeType } from "../../Components/Node";
 
 const randomMaze = (matrix: NodeType[][]): NodeType[][] => {

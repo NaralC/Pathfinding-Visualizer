@@ -1,5 +1,18 @@
 import { makeAutoObservable } from "mobx";
-import { NodeType } from "./Components/Node";
+
+export type NodeType = {
+  row: number;
+  col: number;
+  isStart: boolean;
+  isFinish: boolean;
+  isVisited: boolean;
+  isWall: boolean;
+  isShortestPath: boolean;
+  previousNode: NodeType | null;
+  onMouseDown: () => void;
+  onMouseUp: () => void;
+  onMouseEnter: () => void; // Dragging mouse over a node
+};
 
 class Store {
   // Data
@@ -12,6 +25,14 @@ class Store {
   showModal: boolean = false;
   needToClearBoard: boolean = false;
   canVisualize: boolean = false;
+
+  // Hardcoded start, end, and matrix size
+  START_ROW: number = 7;
+  START_COL: number = 10;
+  FINISH_ROW: number = 7;
+  FINISH_COL: number = 40;
+  MATRIX_ROWS: number = 15;
+  MATRIX_COLS: number = 50;
 
   constructor() {
     makeAutoObservable(this);

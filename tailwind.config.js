@@ -67,6 +67,9 @@ module.exports = {
             backgroundColor: 'rgb(250 204 21)'
           },
         }
+      },
+      fontFamily: {
+        JetbrainsMono: "Jetbrains Mono"
       }
     },
   },
