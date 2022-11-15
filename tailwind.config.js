@@ -1,5 +1,8 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  images: {
+    disableStaticImages: true,
+  },
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
