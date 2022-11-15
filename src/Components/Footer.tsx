@@ -1,9 +1,5 @@
 import React from "react";
-import { default as react_logo } from "../assets/react.svg";
-import { default as ts_logo } from "../Assets/ts.svg";
-import { default as tailwind_logo } from "../Assets/tailwind.svg";
-import { default as daisy_logo } from "../Assets/daisy.svg";
-import { BsGithub } from "react-icons/all";
+import { BsGithub, DiReact, SiTypescript, SiTailwindcss, GiDaisy } from "react-icons/all";
 
 type Props = {};
 
@@ -12,30 +8,23 @@ const Footer: React.FC<Props> = () => {
     <footer className="footer-center flex flex-col justify-center px-12 gap-y-3 p-4 bg-neutral text-neutral-content">
       <div className="flex gap-5 tooltip">
         <div className="tooltip" data-tip="React">
-          <img
-            className="w-8 md:w-12 hover:animate-spin transition-all delay-150 hover:mx-5"
-            src={react_logo}
-          />
+          <DiReact className="hover:animate-spin transition-all delay-150 hover:mx-5 text-4xl md:text-6xl hover:text-cyan-400 text-white" />
         </div>
         <div className="tooltip" data-tip="TypeScript">
-          <img
-            className="w-8 md:w-12 transition-all delay-150 hover:mx-5"
-            src={ts_logo}
-          />
+          <SiTypescript className="transition-all delay-150 hover:mx-5 text-3xl md:text-5xl hover:text-blue-500 text-gray-300 bg-white rounded-btn" />
         </div>
         <div className="tooltip" data-tip="Tailwind CSS">
-          <img
-            className="w-8 md:w-14 transition-all delay-150 hover:mx-5"
-            src={tailwind_logo}
-          />
+          <SiTailwindcss className="transition-all delay-150 hover:mx-5 text-4xl md:text-6xl hover:text-sky-400 text-white "/>
         </div>
         <div className="tooltip" data-tip="daisyUI">
-          <img
-            className="w-8 md:w-20 transition-all delay-150 hover:mx-5"
-            src={daisy_logo}
-          />
+          <GiDaisy className="transition-all delay-150 hover:mx-5 text-4xl md:text-6xl hover:text-purple-600 text-white" />
         </div>
-        <a className="tooltip" data-tip="Check out the code!" href="https://github.com/NaralC/Pathfinding-Visualizer" target="_blank">
+        <a
+          className="tooltip"
+          data-tip="Check out the code!"
+          href="https://github.com/NaralC/Pathfinding-Visualizer"
+          target="_blank"
+        >
           <BsGithub className="text-3xl md:text-5xl w-20 transition-all delay-150 hover:mx-5" />
         </a>
       </div>

@@ -12,6 +12,7 @@ import { NodeType } from "./store";
 import store from "./store";
 import { initializeMatrix } from "./Algorithms/Utility";
 import Footer from "./Components/Footer";
+import { GiPathDistance, GiMarsPathfinder } from "react-icons/all";
 
 const App: React.FC = () => {
   // Lists of data
@@ -249,8 +250,11 @@ const App: React.FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <header className="flex justify-center text-3xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
-        PATHFINDING VISUALIZER
+      <header className="flex justify-center items-center">
+        <div className="text-3xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
+          PATHFINDING VISUALIZER
+        </div>
+        <GiPathDistance className="text-3xl md:text-4xl lg:text-5xl"/>
       </header>
       <nav className="flex flex-col md:flex-row gap-7 md:justify-center w-full md:w-fit rounded mx-auto p-5 bg-gray-200 text-xs sm:text-sm md:text-md lg:text-lg">
         <Dropdown
