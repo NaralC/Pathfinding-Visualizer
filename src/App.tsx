@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Node, { NodeType } from "./Components/Node";
+import Node from "./Components/Node";
 import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
 import randomMaze from "./Algorithms/MazeGeneration/randomMaze";
@@ -8,21 +8,17 @@ import verticalDivision from "./Algorithms/MazeGeneration/verticalDivision";
 import Modal from "./Components/Modal";
 import Dropdown from "./Components/Dropdown";
 import Button from "./Components/Button";
-
-// Hardcoded start, end, and matrix size
-let START_ROW: number = 7;
-let START_COL: number = 10;
-let FINISH_ROW: number = 7;
-let FINISH_COL: number = 40;
-const MATRIX_ROWS: number = 15;
-const MATRIX_COLS: number = 50;
+import { NodeType } from "./store";
+import store from "./store";
+import { initializeMatrix } from "./Algorithms/Utility";
+import Footer from "./Components/Footer";
+import { GiPathDistance, GiMarsPathfinder } from "react-icons/all";
 
 const App: React.FC = () => {
   // Lists of data
-  const [nodeList, setNodeList] = useState<NodeType[][]>(initializeMatrix);
+  const [nodeList, setNodeList] = useState<NodeType[][]>([[]]);
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
   const [mazeGenAlgo, setMazeGenAlgo] = useState<string>("Random");
-  const [theme, setTheme] = useState<string>("Light");
 
   // Mouse events
   const [mouseIsDown, toggleMouseIsDown] = useState<boolean>(false);
@@ -36,12 +32,16 @@ const App: React.FC = () => {
   const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
   const [canVisualize, setCanVisualize] = useState<boolean>(true);
 
-  const listOfAlgos: string[] = ["BFS", "DFS"];
+  const listOfAlgos: string[] = ["Breadth-First Search", "Depth-First Search"];
   const listOfMazes: string[] = [
     "Random",
     "Horizontal Division",
     "Vertical Division",
   ];
+
+  useEffect(() => {
+    setNodeList(initializeMatrix);
+  }, []);
 
   const startVisualization = (): void => {
     let data;
@@ -50,24 +50,24 @@ const App: React.FC = () => {
       case "BFS":
         data = BFS(
           nodeList,
-          nodeList[START_ROW][START_COL],
-          nodeList[FINISH_ROW][FINISH_COL]
+          nodeList[store.START_ROW][store.START_COL],
+          nodeList[store.FINISH_ROW][store.FINISH_COL]
         );
         break;
 
       case "DFS":
         data = DFS(
           nodeList,
-          nodeList[START_ROW][START_COL],
-          nodeList[FINISH_ROW][FINISH_COL]
+          nodeList[store.START_ROW][store.START_COL],
+          nodeList[store.FINISH_ROW][store.FINISH_COL]
         );
         break;
 
       default:
         data = BFS(
           nodeList,
-          nodeList[START_ROW][START_COL],
-          nodeList[FINISH_ROW][FINISH_COL]
+          nodeList[store.START_ROW][store.START_COL],
+          nodeList[store.FINISH_ROW][store.FINISH_COL]
         );
         console.log("DEFAULTS TO BFS");
     }
@@ -121,7 +121,7 @@ const App: React.FC = () => {
       });
 
       // Shows error modal in case the end node can't be reached
-      if (!nodeList[FINISH_ROW][FINISH_COL].isVisited) {
+      if (!nodeList[store.FINISH_ROW][store.FINISH_COL].isVisited) {
         setshowModal(true);
 
         setTimeout(() => {
@@ -188,15 +188,15 @@ const App: React.FC = () => {
 
       // Get rid of the start/end node
       if (isHoldingStartOrEnd === "start") {
-        tempNodeList[START_ROW][START_COL].isStart = false;
-        START_ROW = rowIdx;
-        START_COL = colIdx;
-        tempNodeList[START_ROW][START_COL].isStart = true;
+        tempNodeList[store.START_ROW][store.START_COL].isStart = false;
+        store.START_ROW = rowIdx;
+        store.START_COL = colIdx;
+        tempNodeList[store.START_ROW][store.START_COL].isStart = true;
       } else if (isHoldingStartOrEnd === "finish") {
-        tempNodeList[FINISH_ROW][FINISH_COL].isFinish = false;
-        FINISH_ROW = rowIdx;
-        FINISH_COL = colIdx;
-        tempNodeList[FINISH_ROW][FINISH_COL].isFinish = true;
+        tempNodeList[store.FINISH_ROW][store.FINISH_COL].isFinish = false;
+        store.FINISH_ROW = rowIdx;
+        store.FINISH_COL = colIdx;
+        tempNodeList[store.FINISH_ROW][store.FINISH_COL].isFinish = true;
       }
 
       setNodeList(tempNodeList);
@@ -249,8 +249,14 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col flex-shink-1">
-      <div className="flex flex-row align-middle justify-center bg-gray-400 rounded-lg m-5">
+    <div className="flex flex-col min-h-screen">
+      <header className="flex justify-center items-center">
+        <div className="text-3xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
+          PATHFINDING VISUALIZER
+        </div>
+        <GiPathDistance className="text-3xl md:text-4xl lg:text-5xl"/>
+      </header>
+      <nav className="flex flex-col md:flex-row gap-7 md:justify-center w-full md:w-fit rounded mx-auto p-5 bg-gray-200 text-xs sm:text-sm md:text-md lg:text-lg">
         <Dropdown
           displayText="Pick an Algorithm!"
           handleClick={setPathfindingAlgo}
@@ -279,8 +285,9 @@ const App: React.FC = () => {
           extraClassName="btn-disabled"
           handleClick={handleClearBoard}
         />
-      </div>
-      <div className="">
+      </nav>
+      <div className=""></div>
+      <section className=" mx-auto my-5">
         {showModal && (
           <Modal
             header="Couldn't find the most optimal path"
@@ -289,10 +296,7 @@ const App: React.FC = () => {
         )}
         {nodeList.map((row, rowIdx) => {
           return (
-            <ol
-              key={`${row}-${rowIdx}`}
-              className="flex justify-center align-middle"
-            >
+            <ol key={`${row}-${rowIdx}`} className="flex">
               {row.map((col, colIdx) => (
                 <Node
                   key={`${rowIdx}-${colIdx}`}
@@ -312,46 +316,22 @@ const App: React.FC = () => {
             </ol>
           );
         })}
-      </div>
+      </section>
+      <div className="grow"></div>
+      <footer className="font-JetbrainsMono">
+        <Footer />
+      </footer>
     </div>
   );
 };
 
 export default App;
 
-export const initializeMatrix = (): NodeType[][] => {
-  const nodeList: NodeType[][] = [];
-
-  for (let rowIdx = 0; rowIdx < MATRIX_ROWS; rowIdx++) {
-    const currentRow: NodeType[] = [];
-
-    for (let colIdx = 0; colIdx < MATRIX_COLS; colIdx++) {
-      const currentNode: NodeType = {
-        row: rowIdx,
-        col: colIdx,
-        isStart: START_ROW === rowIdx && START_COL === colIdx,
-        isFinish: FINISH_ROW === rowIdx && FINISH_COL === colIdx,
-        isVisited: false,
-        isWall: false,
-        isShortestPath: false,
-        previousNode: null,
-        onMouseDown: () => {},
-        onMouseUp: () => {},
-        onMouseEnter: () => {},
-      };
-
-      currentRow.push(currentNode);
-    }
-    nodeList.push(currentRow);
-  }
-
-  return nodeList;
-};
-
-// TODO:
-// More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's)
+// TODO: Functionalities
+// More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division)
 // More Pathfinding Algorithms (A*, Djikstra)
 // Let user pick matrix size
-// Light and dark theme
+
+// TODO: Improvements
 // Let user pick start and end nodes (still buggy)
 // Wall animation is slightly off when visualization starts

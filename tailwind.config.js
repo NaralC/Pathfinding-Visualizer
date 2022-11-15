@@ -1,12 +1,15 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  images: {
+    disableStaticImages: true,
+  },
   content: [
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
       animation: {
-        'visit_node_animation': 'visit_node_animation 2s linear 1',
+        'visit_node_animation': 'visit_node_animation 1.5s linear 1',
         'wall_node_animation': 'wall_node_animation 0.25s linear 1',
         'shortest_path_animation': 'shortest_path_animation 1.5s linear 1'
       },
@@ -67,6 +70,9 @@ module.exports = {
             backgroundColor: 'rgb(250 204 21)'
           },
         }
+      },
+      fontFamily: {
+        JetbrainsMono: "Jetbrains Mono"
       }
     },
   },
