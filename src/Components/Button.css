@@ -3,6 +3,6 @@
 @tailwind utilities;
 
 .button {
-  @apply mx-3 ease-in-out duration-500 transition-all
-  btn btn-xs sm:btn-sm md:btn-md lg:btn-lg w-auto
+  @apply ease-in-out duration-500 transition-all
+  btn btn-xs sm:btn-sm md:btn-md lg:btn-lg md:w-auto w-full
 }

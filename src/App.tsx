@@ -11,6 +11,7 @@ import Button from "./Components/Button";
 import { NodeType } from "./store";
 import store from "./store";
 import { initializeMatrix } from "./Algorithms/Utility";
+import Footer from "./Components/Footer";
 
 const App: React.FC = () => {
   // Lists of data
@@ -30,7 +31,7 @@ const App: React.FC = () => {
   const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
   const [canVisualize, setCanVisualize] = useState<boolean>(true);
 
-  const listOfAlgos: string[] = ["BFS", "DFS"];
+  const listOfAlgos: string[] = ["Breadth-First Search", "Depth-First Search"];
   const listOfMazes: string[] = [
     "Random",
     "Horizontal Division",
@@ -39,8 +40,7 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setNodeList(initializeMatrix);
-  }, [])
-  
+  }, []);
 
   const startVisualization = (): void => {
     let data;
@@ -248,11 +248,11 @@ const App: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen">
-      <div className="flex justify-center text-3xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
+    <div className="flex flex-col min-h-screen">
+      <header className="flex justify-center text-3xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
         PATHFINDING VISUALIZER
-      </div>
-      <div className="flex flex-row justify-around rounded m-3 p-3 bg-gray-200">
+      </header>
+      <nav className="flex flex-col md:flex-row gap-7 md:justify-center w-full md:w-fit rounded mx-auto p-5 bg-gray-200 text-xs sm:text-sm md:text-md lg:text-lg">
         <Dropdown
           displayText="Pick an Algorithm!"
           handleClick={setPathfindingAlgo}
@@ -281,8 +281,9 @@ const App: React.FC = () => {
           extraClassName="btn-disabled"
           handleClick={handleClearBoard}
         />
-      </div>
-      <div className="bg-gray-200 container mx-auto">
+      </nav>
+      <div className=""></div>
+      <section className=" mx-auto my-5">
         {showModal && (
           <Modal
             header="Couldn't find the most optimal path"
@@ -291,10 +292,7 @@ const App: React.FC = () => {
         )}
         {nodeList.map((row, rowIdx) => {
           return (
-            <ol
-              key={`${row}-${rowIdx}`}
-              className="flex justify-center align-middle"
-            >
+            <ol key={`${row}-${rowIdx}`} className="flex">
               {row.map((col, colIdx) => (
                 <Node
                   key={`${rowIdx}-${colIdx}`}
@@ -314,13 +312,16 @@ const App: React.FC = () => {
             </ol>
           );
         })}
-      </div>
+      </section>
+      <div className="grow"></div>
+      <footer className="font-JetbrainsMono">
+        <Footer />
+      </footer>
     </div>
   );
 };
 
 export default App;
-
 
 // TODO: Functionalities
 // More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division)

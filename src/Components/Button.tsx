@@ -16,7 +16,7 @@ const Button: React.FC<Props> = ({
 }) => {
   return (
     <button
-      className={`button ${isClickable ? "" : extraClassName} text-xs sm:text-sm md:text-md lg:text-lg`}
+      className={`button ${isClickable ? "" : extraClassName}`}
       onClick={() => {
         if (isClickable) handleClick();
       }}
