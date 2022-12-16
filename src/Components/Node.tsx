@@ -23,7 +23,7 @@ const Node: React.FC<NodeType> = (props) => {
     if (props.isShortestPath) return "shortest-path";
     if (props.isVisited) return "node-visited";
 
-    return "bg-gray-400";
+    return "bg-white";
   };
   return (
     <div

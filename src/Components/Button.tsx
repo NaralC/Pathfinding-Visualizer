@@ -1,14 +1,14 @@
 import React from "react";
 import "./Button.css";
 
-type Props = {
+type ButtonProps = {
   text: string;
   isClickable: boolean;
   extraClassName: string;
   handleClick: () => void;
 };
 
-const Button: React.FC<Props> = ({
+const Button: React.FC<ButtonProps> = ({
   text,
   isClickable,
   extraClassName,
@@ -18,7 +18,7 @@ const Button: React.FC<Props> = ({
     <button
       className={`button ${isClickable ? "" : extraClassName}`}
       onClick={() => {
-        if (isClickable) handleClick();
+        if (isClickable) { handleClick(); }
       }}
     >
       {text}
