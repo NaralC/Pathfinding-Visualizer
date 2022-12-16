@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 import Node from "./Components/Node";
 import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
@@ -12,7 +12,8 @@ import { NodeType } from "./store";
 import store from "./store";
 import { initializeMatrix } from "./Algorithms/Utility";
 import Footer from "./Components/Footer";
-import { GiPathDistance, GiMarsPathfinder } from "react-icons/all";
+import { GiPathDistance, AiFillQuestionCircle } from "react-icons/all";
+import Hero from "./Components/Hero";
 
 const App: React.FC = () => {
   // Lists of data
@@ -31,6 +32,7 @@ const App: React.FC = () => {
   const [showModal, setshowModal] = useState<boolean>(false);
   const [needToClearBoard, setNeedToClearBoard] = useState<boolean>(false);
   const [canVisualize, setCanVisualize] = useState<boolean>(true);
+  const [showHero, setShowHero] = useState<boolean>(false);
 
   const listOfAlgos: string[] = ["Breadth-First Search", "Depth-First Search"];
   const listOfMazes: string[] = [
@@ -41,13 +43,17 @@ const App: React.FC = () => {
 
   useEffect(() => {
     setNodeList(initializeMatrix);
+
+    return () => {
+      clearInterval;
+    };
   }, []);
 
   const startVisualization = (): void => {
     let data;
 
     switch (pathfindingAlgo) {
-      case "BFS":
+      case "Breadth-First Search":
         data = BFS(
           nodeList,
           nodeList[store.START_ROW][store.START_COL],
@@ -55,7 +61,7 @@ const App: React.FC = () => {
         );
         break;
 
-      case "DFS":
+      case "Depth-First Search":
         data = DFS(
           nodeList,
           nodeList[store.START_ROW][store.START_COL],
@@ -251,10 +257,17 @@ const App: React.FC = () => {
   return (
     <div className="flex flex-col min-h-screen">
       <header className="flex justify-center items-center">
-        <div className="text-3xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
+        <div
+          className="tooltip tooltip-right sm:tooltip-left"
+          data-tip="What's this project about?"
+          onClick={() => setShowHero(true)}
+        >
+          <AiFillQuestionCircle className="text-xl md:text-2xl lg:text-3xl hover:cursor-pointer hover:text-blue-500 transition-all delay-75" />
+        </div>
+        <div className="text-2xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
           PATHFINDING VISUALIZER
         </div>
-        <GiPathDistance className="text-3xl md:text-4xl lg:text-5xl"/>
+        <GiPathDistance className="text-3xl md:text-4xl lg:text-5xl" />
       </header>
       <nav className="flex flex-col md:flex-row gap-7 md:justify-center w-full md:w-fit rounded mx-auto p-5 bg-gray-200 text-xs sm:text-sm md:text-md lg:text-lg">
         <Dropdown
@@ -287,13 +300,13 @@ const App: React.FC = () => {
         />
       </nav>
       <div className=""></div>
-      <section className=" mx-auto my-5">
-        {showModal && (
-          <Modal
-            header="Couldn't find the most optimal path"
-            body="All paths leading to the finish are blocked!"
-          />
+      <section className="mx-auto my-5">
+        {showHero && (
+          <div onClick={() => setShowHero(false)}>
+            <Hero />
+          </div>
         )}
+        {showModal && <Modal />}
         {nodeList.map((row, rowIdx) => {
           return (
             <ol key={`${row}-${rowIdx}`} className="flex">
