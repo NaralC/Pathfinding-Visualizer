@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment } from "react";
+import React, { useEffect, useState, Fragment, useReducer } from "react";
 import Node from "./Components/Node";
 import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
@@ -14,6 +14,7 @@ import { initializeMatrix } from "./Algorithms/Utility";
 import Footer from "./Components/Footer";
 import { GiPathDistance, AiFillQuestionCircle } from "react-icons/all";
 import Hero from "./Components/Hero";
+import binaryTreeMaze from "./Algorithms/MazeGeneration/binaryTree";
 
 const App: React.FC = () => {
   // Lists of data
@@ -35,11 +36,7 @@ const App: React.FC = () => {
   const [showHero, setShowHero] = useState<boolean>(false);
 
   const listOfAlgos: string[] = ["Breadth-First Search", "Depth-First Search"];
-  const listOfMazes: string[] = [
-    "Random",
-    "Horizontal Division",
-    "Vertical Division",
-  ];
+  const listOfMazes: string[] = ["Random", "Binary Tree"];
 
   useEffect(() => {
     setNodeList(initializeMatrix);
@@ -238,9 +235,13 @@ const App: React.FC = () => {
         setNodeList(verticalDivision(nodeList));
         break;
 
+      case "Binary Tree":
+        setNodeList(binaryTreeMaze(nodeList));
+        break;
+
       default:
+        console.log("DEFAULTS TO BINARY TREE");
         setNodeList(randomMaze(nodeList));
-        console.log("DEFAULTS TO RANDOM GENERATION");
         break;
     }
 
@@ -340,11 +341,11 @@ const App: React.FC = () => {
 
 export default App;
 
-// TODO: Functionalities
-// More Maze Generation Algorithms (Binary Tree, Kruskal's, Prim's, Recursive Division)
-// More Pathfinding Algorithms (A*, Djikstra)
-// Let user pick matrix size
-
-// TODO: Improvements
-// Let user pick start and end nodes (still buggy)
-// Wall animation is slightly off when visualization starts
+// TODO
+// - add dijkstar
+// - add a*
+// - add recursive div maze
+// - dropdowns are confusing
+// - actually use MobX
+// - bug when dragging wall over start/end
+// - remove moving start/end

@@ -31,8 +31,8 @@ class Store {
   START_COL: number = 10;
   FINISH_ROW: number = 7;
   FINISH_COL: number = 40;
-  MATRIX_ROWS: number = 15;
-  MATRIX_COLS: number = 50;
+  MATRIX_ROWS: number = 19;
+  MATRIX_COLS: number = 49;
 
   constructor() {
     makeAutoObservable(this);
