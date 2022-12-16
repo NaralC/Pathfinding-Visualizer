@@ -6,7 +6,7 @@
   @apply 2xl:w-6 2xl:h-6
   lg:w-4 lg:h-4 lg:m-[2px]
   sm:w-3 sm:h-3 md:m-[1px]
-  w-2 h-2 m-0
+  w-2.5 h-2.5 m-0
   border-solid border-2 border-gray-400
   ease-in-out duration-300 transition-all;
 }

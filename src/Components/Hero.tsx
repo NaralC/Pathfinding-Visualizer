@@ -14,15 +14,18 @@ const Hero: React.FC = () => {
           This project was made to practice React, TypeScript, and Tailwind
         </div>
         <div className="flex">
-          <GiMaze className="text-3xl mx-2"/>
+          <GiMaze className="text-3xl mx-2" />
           <pre className="font-bold">Step 1 </pre>Pick a maze generation
           algorithm!
         </div>
         <div className="flex">
-          <FaFileCode className="text-3xl mx-2"/>
-        <pre className="font-semibold">Step 2 </pre>Pick a pathfinding algorithm!
+          <FaFileCode className="text-3xl mx-2" />
+          <pre className="font-semibold">Step 2 </pre>Pick a pathfinding
+          algorithm!
         </div>
-        <div className="">Step 3: EUREKA!</div>
+        <div className="flex">
+          <pre className="font-bold">Step 3 </pre>Eureka!
+        </div>
         <a
           className="tooltip tooltip-bottom"
           data-tip="Check out the code!"
