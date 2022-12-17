@@ -1,4 +1,4 @@
-import React, { useEffect, useState, Fragment, useReducer } from "react";
+import React, { useEffect, useState, useReducer } from "react";
 import Node from "./Components/Node";
 import BFS from "./Algorithms/Pathfinding/BFS";
 import DFS from "./Algorithms/Pathfinding/DFS";
@@ -16,7 +16,79 @@ import { GiPathDistance, AiFillQuestionCircle } from "react-icons/all";
 import Hero from "./Components/Hero";
 import binaryTreeMaze from "./Algorithms/MazeGeneration/binaryTree";
 
+type ACTIONTYPES =
+  | { type: "pathfinding-BFS" }
+  | { type: "pathfinding-DFS" }
+  | { type: "algo-random" }
+  | { type: "algo-binaryTree" }
+  | { type: "algo-horiDiv" }
+  | { type: "init-matrix" };
+// | { type: "pathfinding-BFS"; payload: string }
+// | { type: "pathfinding-DFS"; payload: string }
+// | { type: "algo-random"; payload: string }
+// | { type: "algo-binaryTree"; payload: string }
+// | { type: "algo-horiDiv"; payload: string }
+// | { type: "init-matrix"; payload: string };
+
+const initialDataState: {
+  nodeList: (NodeType | void)[][];
+  pathfindingAlgo: string;
+  mazeGenAlgo: string;
+} = {
+  nodeList: [[]],
+  pathfindingAlgo: "BFS",
+  mazeGenAlgo: "Random",
+};
+
+const dataReducer = (state: typeof initialDataState, action: ACTIONTYPES) => {
+  switch (action.type) {
+    case "pathfinding-BFS":
+      return {
+        ...state,
+        pathfindingAlgo: "BFS",
+      };
+
+    case "pathfinding-DFS":
+      return {
+        ...state,
+        pathfindingAlgo: "DFS",
+      };
+
+    case "algo-random":
+      return {
+        ...state,
+        mazeGenAlgo: "Random",
+      };
+
+    case "algo-binaryTree":
+      return {
+        ...state,
+        mazeGenAlgo: "Binary Tree",
+      };
+
+    case "algo-horiDiv":
+      return {
+        ...state,
+        mazeGenAlgo: "Horizontal Division",
+      };
+
+    case "init-matrix":
+      return {
+        ...state,
+        nodeList: initializeMatrix(),
+      };
+
+    default:
+      throw new Error("Bad Action 🤓");
+  }
+};
+
 const App: React.FC = () => {
+  const [dataState, dispatchDataState] = useReducer(
+    dataReducer,
+    initialDataState
+  );
+
   // Lists of data
   const [nodeList, setNodeList] = useState<NodeType[][]>([[]]);
   const [pathfindingAlgo, setPathfindingAlgo] = useState<string>("BFS");
@@ -36,10 +108,17 @@ const App: React.FC = () => {
   const [showHero, setShowHero] = useState<boolean>(false);
 
   const listOfAlgos: string[] = ["Breadth-First Search", "Depth-First Search"];
-  const listOfMazes: string[] = ["Random", "Binary Tree"];
+  const listOfMazes: string[] = [
+    "Random",
+    "Binary Tree",
+    "Horizontal Division",
+  ];
 
   useEffect(() => {
     setNodeList(initializeMatrix);
+    // dispatchDataState({
+    //   type: "init-matrix",
+    // });
 
     return () => {
       clearInterval;
@@ -231,10 +310,6 @@ const App: React.FC = () => {
         setNodeList(horizontalDivision(nodeList));
         break;
 
-      case "Vertical Division":
-        setNodeList(verticalDivision(nodeList));
-        break;
-
       case "Binary Tree":
         setNodeList(binaryTreeMaze(nodeList));
         break;
@@ -342,6 +417,7 @@ const App: React.FC = () => {
 export default App;
 
 // TODO
+// - try useReducer
 // - add dijkstar
 // - add a*
 // - add recursive div maze
