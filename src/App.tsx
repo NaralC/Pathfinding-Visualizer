@@ -15,7 +15,6 @@ import Footer from "./Components/Footer";
 import { GiPathDistance, AiFillQuestionCircle } from "react-icons/all";
 import Hero from "./Components/Hero";
 import binaryTreeMaze from "./Algorithms/MazeGeneration/binaryTree";
-import { Analytics } from "@vercel/analytics/react";
 
 type ACTIONTYPES =
   | { type: "pathfinding-BFS" }
@@ -413,7 +412,6 @@ const App: React.FC = () => {
         <Footer />
       </footer>
     </div>
-    <Analytics />
     </>
   );
 };
