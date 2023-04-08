@@ -15,6 +15,7 @@ import Footer from "./Components/Footer";
 import { GiPathDistance, AiFillQuestionCircle } from "react-icons/all";
 import Hero from "./Components/Hero";
 import binaryTreeMaze from "./Algorithms/MazeGeneration/binaryTree";
+import { Analytics } from "@vercel/analytics/react";
 
 type ACTIONTYPES =
   | { type: "pathfinding-BFS" }
@@ -331,21 +332,22 @@ const App: React.FC = () => {
   };
 
   return (
+    <>
     <div className="flex flex-col min-h-screen">
-      <header className="flex justify-center items-center">
+      <header className="flex items-center justify-center">
         <div
           className="tooltip tooltip-right sm:tooltip-left"
           data-tip="What's this project about?"
           onClick={() => setShowHero(true)}
         >
-          <AiFillQuestionCircle className="text-xl md:text-2xl lg:text-3xl hover:cursor-pointer hover:text-blue-500 transition-all delay-75" />
+          <AiFillQuestionCircle className="text-xl transition-all delay-75 md:text-2xl lg:text-3xl hover:cursor-pointer hover:text-blue-500" />
         </div>
-        <div className="text-2xl md:text-4xl lg:text-5xl font-JetbrainsMono p-5">
+        <div className="p-5 text-2xl md:text-4xl lg:text-5xl font-JetbrainsMono">
           PATHFINDING VISUALIZER
         </div>
         <GiPathDistance className="text-3xl md:text-4xl lg:text-5xl" />
       </header>
-      <nav className="flex flex-col md:flex-row gap-7 md:justify-center w-full md:w-fit rounded mx-auto p-5 bg-gray-200 text-xs sm:text-sm md:text-md lg:text-lg">
+      <nav className="flex flex-col w-full p-5 mx-auto text-xs bg-gray-200 rounded md:flex-row gap-7 md:justify-center md:w-fit sm:text-sm md:text-md lg:text-lg">
         <Dropdown
           displayText="Pick an Algorithm!"
           handleClick={setPathfindingAlgo}
@@ -411,6 +413,8 @@ const App: React.FC = () => {
         <Footer />
       </footer>
     </div>
+    <Analytics />
+    </>
   );
 };
 
